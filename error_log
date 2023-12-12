@@ -1,1 +1,0 @@
-[08-Dec-2023 18:56:01 Asia/Tashkent] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 8.0.30. in /home/temurmal/namangan2023bot.temurmalik96.uz/namangan2023bot/vendor/composer/platform_check.php on line 24
