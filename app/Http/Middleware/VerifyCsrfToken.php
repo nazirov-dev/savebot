@@ -12,8 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        '/send-post-to-channels',
         '/send-notification',
-        '/questionnaire/*/result'
+        '/sendMedia'
     ];
 }

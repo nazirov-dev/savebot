@@ -12,7 +12,7 @@ class BotUser extends Model
     protected $guarded = [];
     protected $table = 'bot_users';
     protected $fillable = [
-        'user_id', 'lang_code', 'name', 'status', 'created_at', 'updated_at'
+        'user_id', 'lang_code', 'name', 'username', 'status', 'created_at', 'updated_at'
     ];
 
 }

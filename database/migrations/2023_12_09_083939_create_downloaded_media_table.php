@@ -16,7 +16,7 @@ class CreateDownloadedMediaTable extends Migration
         Schema::create('downloaded_media', function (Blueprint $table) {
             $table->id();
             $table->string('url');
-            $table->bigInteger('media_id');
+            $table->string('media_id');
             $table->bigInteger('user_id');
             $table->bigInteger('platform_id');
             $table->bigInteger('media_group_id')->nullable();
