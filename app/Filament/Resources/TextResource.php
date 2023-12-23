@@ -38,7 +38,7 @@ class TextResource extends Resource
                 ->label('Tilni tanlang'),
                     Forms\Components\TextInput::make('subscribe_to_forced_channels')
                         ->label('Subscribe to Forced Channels')
-                        ->hint("⚠️ Ushbu botdan foydalanish uchun quyidagi kanalga a’zo bo‘ling. Keyin <b>\"{check_button}\"</b> tugmasini bosing."),
+                        ->hint("⚠️ Ushbu botdan foydalanish uchun quyidagi kanalga a’zo bo‘ling. Keyin <b>\"A’zo bo‘ldim ✅\"</b> tugmasini bosing."),
 
                     Forms\Components\TextInput::make('ad_text')
                         ->label('Ad Text')
@@ -59,6 +59,9 @@ class TextResource extends Resource
                     Forms\Components\TextInput::make('cancel_button_label')
                         ->label('Cancel Button Label')
                         ->hint('Bekor qilish ❌'),
+                    Forms\Components\TextInput::make('select_language')
+                        ->label('Cancel Button Label')
+                        ->hint('<b>🇺🇿 O’zingizga qulay bo’lgan tilni tanlang.</b>'),
 
 
             ]);

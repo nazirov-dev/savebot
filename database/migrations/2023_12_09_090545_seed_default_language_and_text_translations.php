@@ -17,7 +17,7 @@ return new class () extends Migration {
 
         if (!$uzbekLang) {
             Lang::create([
-                'name' => 'O\'zbek tili 🇺🇿',
+                'name' => 'O’zbek tili 🇺🇿',
                 'short_code' => 'uz',
                 'status' => 1
             ]);
@@ -37,10 +37,11 @@ return new class () extends Migration {
 <b>🚀 Media yuklash uchun shunchaki uning havolasini yuboring:</b>"],
             ['key' => 'subscribe_to_forced_channels', 'value' => "⚠️ Ushbu botdan foydalanish uchun quyidagi kanalga a’zo bo‘ling. Keyin <b>\"{check_button}\"</b> tugmasini bosing."],
             ['key' => 'ad_text', 'value' => '🤖 @ALLSAVEUZ_Bot orqali yuklab olindi.'],
-            ['key' => 'language_changed', 'value' => 'Til o\'zgartirildi ✅'],
-            ['key' => 'you_are_still_not_member', 'value' => 'Siz hali a\'zolikka o\'tmagansiz'],
+            ['key' => 'language_changed', 'value' => 'Til o’zgartirildi ✅'],
+            ['key' => 'you_are_still_not_member', 'value' => 'Siz hali a’zolikka o’tmagansiz'],
             ['key' => 'check_button_label', 'value' => 'A’zo bo‘ldim ✅'],
-            ['key' => 'cancel_button_label', 'value' => 'Bekor qilish ❌']
+            ['key' => 'cancel_button_label', 'value' => 'Bekor qilish ❌'],
+            ['key' => 'select_language', 'value' => '<b>🇺🇿 O’zingizga qulay bo’lgan tilni tanlang.</b>']
         ];
 
 
