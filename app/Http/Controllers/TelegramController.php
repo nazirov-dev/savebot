@@ -30,9 +30,6 @@ class TelegramController extends Controller
         if ($chat_type == 'private') {
             $run = new PrivateChat();
             return $run->handle($bot);
-        } elseif ($chat_type == 'channel') {
-            $run = new ChannelController();
-            return $run->handle($bot);
         }
     }
 }
