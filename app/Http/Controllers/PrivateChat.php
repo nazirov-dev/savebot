@@ -44,7 +44,7 @@ class PrivateChat extends Controller
 
         if (!is_null($text)) {
             $user = BotUser::where('user_id', $chat_id)->first();
-            if (!$user || empty($user->lang_code)) {
+            if ((!$user || empty($user->lang_code)) && strpos($text, 'lang_') === false) {
                 $langs = Lang::where(['status' => 1])->get()->toArray();
                 $keyboard = [];
                 $select_text = "";
