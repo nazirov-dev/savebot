@@ -16,7 +16,7 @@ class CreateBotUsersTable extends Migration
         Schema::create('bot_users', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
-            $table->string('lang_code');
+            $table->string('lang_code')->nullable();
             $table->string('name');
             $table->string('username');
             $table->boolean('status')->default(false);
