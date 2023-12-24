@@ -201,6 +201,10 @@ class PrivateChat extends Controller
 
                                 if($data['ok']) {
                                     $makeContentData = $this->createContentData($data, $chat_id);
+                                    $bot->sendMessage([
+                                        'chat_id'=>$chat_id,
+                                        'text'=>json_encode($makeContentData, 128)
+                                    ]);
                                     $sent = $bot->$makeContentData['method']($makeContentData['content']);
                                     if(!$sent['ok']) {
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
