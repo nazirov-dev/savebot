@@ -74,8 +74,13 @@ class InstagramDownloader extends Controller
             if(is_array($Media)) {
                 if(isset($Media['status']) && $Media['status'] == 'ok' && isset($Media['items'])) {
                     $item = $Media['items'][0];
+                    if(isset($item['caption']) and !empty($item['caption']['text'])) {
+                        $result = ['caption' => $item['caption']['text']];
+                    } else {
+                        $result = [];
+                    }
                     if($item['media_type'] == 8 && $item['product_type'] == 'carousel_container') {
-                        $result = ['ok' => true];
+                        $result['ok'] = true;
                         $result['medias'] = [];
                         $result['medias_count'] = 0;
                         foreach ($item['carousel_media'] as $media) {
@@ -94,18 +99,18 @@ class InstagramDownloader extends Controller
                         }
                         return $result;
                     } elseif($item['media_type'] == 1) {
-                        $result = ['ok' => true];
+                        $result['ok'] = true;
                         $result['medias'][] = ['type' => 'photo', 'url' => $item['image_versions2']['candidates'][0]['url']];
                         $result['medias_count'] = 1;
                         return $result;
                     } elseif($item['media_type'] == 2) {
-                        $result = ['ok' => true];
+                        $result['ok'] = true;
                         $result['medias'][] = ['type' => 'video', 'url' => $item['video_versions'][0]['url']];
                         $result['medias_count'] = 1;
                         return $result;
                     }
                 } else {
-                    Log::error("Instagram downloader wrong URL: $url\n" . $Media);
+                    Log::error("Instagram downloader wrong URL: $url\n", $Media);
                     return ['ok' => false, 'error_message' => 'Wrong URL'];
                 }
             } else {
