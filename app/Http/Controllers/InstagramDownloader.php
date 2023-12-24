@@ -95,7 +95,7 @@ class InstagramDownloader extends Controller
                                 continue;
                             }
                             $result['medias'][] = ['type' => $type, 'url' => $url];
-                            $result['media_count']++;
+                            $result['medias_count']++;
                         }
                         return $result;
                     } elseif($item['media_type'] == 1) {
