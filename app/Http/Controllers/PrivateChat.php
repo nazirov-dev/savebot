@@ -189,7 +189,13 @@ class PrivateChat extends Controller
                             if($downloadedMedia) {
                                 $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
                                 $makeContentData = $this->createContentData($data, $chat_id);
-                                $bot->$makeContentData['method']($makeContentData['content']);
+                                if($makeContentData['method'] == 'sendPhoto') {
+                                    $bot->sendPhoto($makeContentData['content']);
+                                } elseif($makeContentData['method'] == 'sendVideo') {
+                                    $bot->sendVideo($makeContentData['content']);
+                                } elseif($makeContentData['method'] == 'sendMediaGroup') {
+                                    $bot->sendMediaGroup($makeContentData['content']);
+                                }
 
                                 $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                 exit;
@@ -202,10 +208,16 @@ class PrivateChat extends Controller
                                 if($data['ok']) {
                                     $makeContentData = $this->createContentData($data, $chat_id);
                                     $bot->sendMessage([
-                                        'chat_id'=>$chat_id,
-                                        'text'=>json_encode($makeContentData, 128)."\n\n\n$"."bot->{$makeContentData['method']}("."$"."makeContentData"."['content']);"
+                                        'chat_id' => $chat_id,
+                                        'text' => json_encode($makeContentData, 128) . "\n\n\n$" . "bot->{$makeContentData['method']}(" . "$" . "makeContentData" . "['content']);"
                                     ]);
-                                    $sent = $bot->$makeContentData['method']($makeContentData['content']);
+                                    if($makeContentData['method'] == 'sendPhoto') {
+                                        $sent = $bot->sendPhoto($makeContentData['content']);
+                                    } elseif($makeContentData['method'] == 'sendVideo') {
+                                        $sent = $bot->sendVideo($makeContentData['content']);
+                                    } elseif($makeContentData['method'] == 'sendMediaGroup') {
+                                        $sent = $bot->sendMediaGroup($makeContentData['content']);
+                                    }
                                     if(!$sent['ok']) {
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
 
@@ -241,7 +253,13 @@ class PrivateChat extends Controller
                             if($downloadedMedia) {
                                 $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
                                 $makeContentData = $this->createContentData($data, $chat_id);
-                                $bot->$makeContentData['method']($makeContentData['content']);
+                                if($makeContentData['method'] == 'sendPhoto') {
+                                    $bot->sendPhoto($makeContentData['content']);
+                                } elseif($makeContentData['method'] == 'sendVideo') {
+                                    $bot->sendVideo($makeContentData['content']);
+                                } elseif($makeContentData['method'] == 'sendMediaGroup') {
+                                    $bot->sendMediaGroup($makeContentData['content']);
+                                }
 
                                 $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                 exit;
@@ -253,7 +271,13 @@ class PrivateChat extends Controller
 
                                 if($data['ok']) {
                                     $makeContentData = $this->createContentData($data, $chat_id);
-                                    $sent = $bot->$makeContentData['method']($makeContentData['content']);
+                                    if($makeContentData['method'] == 'sendPhoto') {
+                                        $sent = $bot->sendPhoto($makeContentData['content']);
+                                    } elseif($makeContentData['method'] == 'sendVideo') {
+                                        $sent = $bot->sendVideo($makeContentData['content']);
+                                    } elseif($makeContentData['method'] == 'sendMediaGroup') {
+                                        $sent = $bot->sendMediaGroup($makeContentData['content']);
+                                    }
                                     if(!$sent['ok']) {
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
 
@@ -289,7 +313,13 @@ class PrivateChat extends Controller
                             if($downloadedMedia) {
                                 $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
                                 $makeContentData = $this->createContentData($data, $chat_id);
-                                $bot->$makeContentData['method']($makeContentData['content']);
+                                if($makeContentData['method'] == 'sendPhoto') {
+                                    $bot->sendPhoto($makeContentData['content']);
+                                } elseif($makeContentData['method'] == 'sendVideo') {
+                                    $bot->sendVideo($makeContentData['content']);
+                                } elseif($makeContentData['method'] == 'sendMediaGroup') {
+                                    $bot->sendMediaGroup($makeContentData['content']);
+                                }
 
                                 $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                 exit;
@@ -300,7 +330,13 @@ class PrivateChat extends Controller
 
                                 if($data['ok']) {
                                     $makeContentData = $this->createContentData($data, $chat_id);
-                                    $sent = $bot->$makeContentData['method']($makeContentData['content']);
+                                    if($makeContentData['method'] == 'sendPhoto') {
+                                        $sent = $bot->sendPhoto($makeContentData['content']);
+                                    } elseif($makeContentData['method'] == 'sendVideo') {
+                                        $sent = $bot->sendVideo($makeContentData['content']);
+                                    } elseif($makeContentData['method'] == 'sendMediaGroup') {
+                                        $sent = $bot->sendMediaGroup($makeContentData['content']);
+                                    }
                                     if(!$sent['ok']) {
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
 
@@ -336,7 +372,13 @@ class PrivateChat extends Controller
                             if($downloadedMedia) {
                                 $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
                                 $makeContentData = $this->createContentData($data, $chat_id);
-                                $bot->$makeContentData['method']($makeContentData['content']);
+                                if($makeContentData['method'] == 'sendPhoto') {
+                                    $bot->sendPhoto($makeContentData['content']);
+                                } elseif($makeContentData['method'] == 'sendVideo') {
+                                    $bot->sendVideo($makeContentData['content']);
+                                } elseif($makeContentData['method'] == 'sendMediaGroup') {
+                                    $bot->sendMediaGroup($makeContentData['content']);
+                                }
 
                                 $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                 exit;
@@ -348,7 +390,13 @@ class PrivateChat extends Controller
 
                                 if($data['ok']) {
                                     $makeContentData = $this->createContentData($data, $chat_id);
-                                    $sent = $bot->$makeContentData['method']($makeContentData['content']);
+                                    if($makeContentData['method'] == 'sendPhoto') {
+                                        $sent = $bot->sendPhoto($makeContentData['content']);
+                                    } elseif($makeContentData['method'] == 'sendVideo') {
+                                        $sent = $bot->sendVideo($makeContentData['content']);
+                                    } elseif($makeContentData['method'] == 'sendMediaGroup') {
+                                        $sent = $bot->sendMediaGroup($makeContentData['content']);
+                                    }
                                     if(!$sent['ok']) {
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
 
@@ -384,7 +432,13 @@ class PrivateChat extends Controller
                             if($downloadedMedia) {
                                 $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
                                 $makeContentData = $this->createContentData($data, $chat_id);
-                                $bot->$makeContentData['method']($makeContentData['content']);
+                                if($makeContentData['method'] == 'sendPhoto') {
+                                    $bot->sendPhoto($makeContentData['content']);
+                                } elseif($makeContentData['method'] == 'sendVideo') {
+                                    $bot->sendVideo($makeContentData['content']);
+                                } elseif($makeContentData['method'] == 'sendMediaGroup') {
+                                    $bot->sendMediaGroup($makeContentData['content']);
+                                }
 
                                 $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                 exit;
@@ -395,7 +449,13 @@ class PrivateChat extends Controller
 
                                 if($data['ok']) {
                                     $makeContentData = $this->createContentData($data, $chat_id);
-                                    $sent = $bot->$makeContentData['method']($makeContentData['content']);
+                                    if($makeContentData['method'] == 'sendPhoto') {
+                                        $sent = $bot->sendPhoto($makeContentData['content']);
+                                    } elseif($makeContentData['method'] == 'sendVideo') {
+                                        $sent = $bot->sendVideo($makeContentData['content']);
+                                    } elseif($makeContentData['method'] == 'sendMediaGroup') {
+                                        $sent = $bot->sendMediaGroup($makeContentData['content']);
+                                    }
                                     if(!$sent['ok']) {
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
 
@@ -431,7 +491,13 @@ class PrivateChat extends Controller
                             if($downloadedMedia) {
                                 $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
                                 $makeContentData = $this->createContentData($data, $chat_id);
-                                $bot->$makeContentData['method']($makeContentData['content']);
+                                if($makeContentData['method'] == 'sendPhoto') {
+                                    $bot->sendPhoto($makeContentData['content']);
+                                } elseif($makeContentData['method'] == 'sendVideo') {
+                                    $bot->sendVideo($makeContentData['content']);
+                                } elseif($makeContentData['method'] == 'sendMediaGroup') {
+                                    $bot->sendMediaGroup($makeContentData['content']);
+                                }
 
                                 $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                 exit;
@@ -443,7 +509,13 @@ class PrivateChat extends Controller
 
                                 if($data['ok']) {
                                     $makeContentData = $this->createContentData($data, $chat_id);
-                                    $sent = $bot->$makeContentData['method']($makeContentData['content']);
+                                    if($makeContentData['method'] == 'sendPhoto') {
+                                        $sent = $bot->sendPhoto($makeContentData['content']);
+                                    } elseif($makeContentData['method'] == 'sendVideo') {
+                                        $sent = $bot->sendVideo($makeContentData['content']);
+                                    } elseif($makeContentData['method'] == 'sendMediaGroup') {
+                                        $sent = $bot->sendMediaGroup($makeContentData['content']);
+                                    }
                                     if(!$sent['ok']) {
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
 
