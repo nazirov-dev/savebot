@@ -94,6 +94,7 @@ class PrivateChat extends Controller
                         'message_id' => $bot->MessageID()
                     ]);
                     $user->lang_code = $new_lang;
+                    $user->status = true;
                     $user->save();
                     return response()->json(['ok' => true], 200);
                 }
