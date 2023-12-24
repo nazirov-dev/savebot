@@ -42,9 +42,9 @@ class LikeeDownloader extends Controller
         $Media = $this->download($url);
         if(is_array($Media)) {
             if(!empty($Media['withoutWater'])) {
-                return ['ok' => true, 'medias' => [['type' => 'video','url' => $Media['withoutWater']]], 'medias_count' => 1, 'caption' => !empty($Media['msg_text']) ? $Media['msg_text'] : null];
+                return ['ok' => true, 'medias' => [['type' => 'video','url' => $Media['withoutWater']]], 'medias_count' => 1, 'caption' => (!empty($Media['msg_text']) && $Media['msg_text'] != 'Likee-Global video creation and sharing platform') ? $Media['msg_text'] : null];
             } elseif(!empty($Media['withWater'])) {
-                return ['ok' => true, 'medias' => [['type' => 'video','url' => $Media['withWater']]], 'medias_count' => 1, 'caption' => !empty($Media['msg_text']) ? $Media['msg_text'] : null];
+                return ['ok' => true, 'medias' => [['type' => 'video','url' => $Media['withWater']]], 'medias_count' => 1, 'caption' => (!empty($Media['msg_text']) && $Media['msg_text'] != 'Likee-Global video creation and sharing platform') ? $Media['msg_text'] : null];
             } else {
                 Log::error('Likee Downloader video format not found: ', $Media);
                 return ['ok' => false,'error_message' => 'Yuklab bo\'lmadi'];

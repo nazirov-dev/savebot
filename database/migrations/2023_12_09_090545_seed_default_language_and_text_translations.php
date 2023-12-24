@@ -41,7 +41,10 @@ return new class () extends Migration {
             ['key' => 'you_are_still_not_member', 'value' => 'Siz hali a’zolikka o’tmagansiz'],
             ['key' => 'check_button_label', 'value' => 'A’zo bo‘ldim ✅'],
             ['key' => 'cancel_button_label', 'value' => 'Bekor qilish ❌'],
-            ['key' => 'select_language', 'value' => '<b>🇺🇿 O’zingizga qulay bo’lgan tilni tanlang.</b>']
+            ['key' => 'select_language', 'value' => '<b>🇺🇿 O’zingizga qulay bo’lgan tilni tanlang.</b>'],
+            ['key' => 'unable_to_download_video', 'value' => '<b>Yuklab olish imkoni mavjud emas, iltimos keyinroq urining!</b>'],
+            ['key' => 'invalid_url', 'value' => '<b>Siz yuborgan havola notog\'ri iltimos tekshirib qaytadan urinib ko\'ring.</b>'],
+            ['key' => 'progress_text', 'value' => '<b>Serverga yuklanmoqda...</b>'],
         ];
 
 

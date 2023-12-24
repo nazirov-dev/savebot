@@ -37,33 +37,40 @@ class TextResource extends Resource
                 ->default($lang_code)
                 ->label('Tilni tanlang'),
                     Forms\Components\TextInput::make('subscribe_to_forced_channels')
-                        ->label('Subscribe to Forced Channels')
+                        ->label('Kanalga azo bo\'lish haqida matn')
                         ->hint("⚠️ Ushbu botdan foydalanish uchun quyidagi kanalga a’zo bo‘ling. Keyin <b>\"A’zo bo‘ldim ✅\"</b> tugmasini bosing."),
 
                     Forms\Components\TextInput::make('ad_text')
-                        ->label('Ad Text')
+                        ->label('Reklama matni')
                         ->hint('🤖 @ALLSAVEUZ_Bot orqali yuklab olindi.'),
 
                     Forms\Components\TextInput::make('language_changed')
-                        ->label('Language Changed')
+                        ->label('Til almashtirilganlik haqida matn')
                         ->hint('Til o\'zgartirildi ✅'),
 
                     Forms\Components\TextInput::make('you_are_still_not_member')
-                        ->label('You Are Still Not a Member')
+                        ->label('Kanalga a\'zo bo\'lmaganlik haqida matn')
                         ->hint('Siz hali a\'zo bo\'lmagansiz'),
 
                     Forms\Components\TextInput::make('check_button_label')
-                        ->label('Check Button Label')
+                        ->label('Azolikni tekshirish knopkasini matni')
                         ->hint('A’zo bo‘ldim ✅'),
 
                     Forms\Components\TextInput::make('cancel_button_label')
-                        ->label('Cancel Button Label')
+                        ->label('Bekor qilish tugmasini matni')
                         ->hint('Bekor qilish ❌'),
                     Forms\Components\TextInput::make('select_language')
-                        ->label('Cancel Button Label')
+                        ->label('Tilni tanlash tog\'risidagi matn')
                         ->hint('<b>🇺🇿 O’zingizga qulay bo’lgan tilni tanlang.</b>'),
-
-
+                    Forms\Components\TextInput::make('unable_to_download_video')
+                        ->label('Video yuklab olib bo\'lmasligi haqida matn')
+                        ->hint('<b>Yuklab olish imkoni mavjud emas, iltimos keyinroq urining!</b>'),
+                    Forms\Components\TextInput::make('invalid_url')
+                        ->label('Yuborilgan link notog\'ri ekanligi haqida matn')
+                        ->hint('<b>Siz yuborgan havola notog\'ri iltimos tekshirib qaytadan urinib ko\'ring.</b>'),
+                    Forms\Components\TextInput::make('progress_text')
+                        ->label('Yuklash boshlanganligi haqida matn')
+                        ->hint('<b>Serverga yuklanmoqda...</b>'),
             ]);
     }
 

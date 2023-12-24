@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\TempFileController;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\BotUser;
 use App\Models\Text;
 use App\Models\Lang;
@@ -32,6 +33,38 @@ class PrivateChat extends Controller
             return $not_subscribed_channels;
         } else {
             return true;
+        }
+
+    }
+
+    public function createContentData(array $data, int $chat_id): array
+    {
+        if($data['medias_count'] == 1) {
+            $content = [
+                'chat_id' => $chat_id,
+                $data['medias'][0]['type'] => $data['medias'][0]['url']
+            ];
+            if(!empty($data['caption'])) {
+                $content['caption'] = $data['caption'];
+            }
+            $method = 'send' . ucfirst($data['medias'][0]['type']);
+            return ['method' => $method, 'content' => $content];
+        } else {
+            $content = [
+                'chat_id' => $chat_id,
+            ];
+            $media = [];
+            foreach ($data['medias'] as $Media) {
+                $media[] = ['type' => $Media['type'], 'media' => $Media['url']];
+            }
+
+            if(!empty($data['caption'])) {
+                $content['media'][0]['caption'] = $data['caption'];
+                $content['media'][0]['parse_mode'] = 'html';
+            }
+            $content['media'] = json_encode($media);
+            $method = 'sendMediaGroup';
+            return ['method' => $method, 'content' => $content];
         }
     }
     public function handle($bot)
@@ -130,18 +163,303 @@ class PrivateChat extends Controller
                             'reply_markup' => $bot->buildInlineKeyBoard($keyboard)
                         ]);
                     } else {
+                        // $platforms = [
+                        //[id' => '1','name' => 'Instagram'],
+                        //[id' => '2','name' => 'Facebook'],
+                        //[id' => '3','name' => 'TikTok'],
+                        //[id' => '4','name' => 'Likee'],
+                        //[id' => '5','name' => 'YouTube'],
+                        //[id' => '6','name' => 'Pinterest']
+                        //];
                         if(strpos($text, 'instagram.com') !== false) {
+                            $progress_msg_id = $bot->sendMessage([
+                                'chat_id' => $chat_id,
+                                'text' => Text::where(['key' => 'progress_text', 'lang_code' => $user->lang_code])->first()->value
+                            ])['result']['message_id'];
+
+                            $ad_text = "\n\n" . Text::where(['key' => 'ad_text', 'lang_code' => $user->lang_code])->first()->value;
                             if(strpos($text, '/reels/') !== false) {
                                 $text = str_replace('/reels/', '/reel/', $text);
                             }
-                            $type = strpos($text, '/stories/') !== false ? 'story' : 'post';
-                            $downloader = new InstagramDownloader();
+                            $downloadedMedia = DownloadedMedia::getMediaOrFalse($text, 1);
+                            if($downloadedMedia) {
+                                $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
+                                $makeContentData = $this->createContentData($data, $chat_id);
+                                $bot->$makeContentData['method']($makeContentData['content']);
 
-                            $media = $downloader->getMedia($text);
+                                $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                exit;
+                            } else {
+                                $type = strpos($text, '/stories/') !== false ? 'story' : 'post';
+                                $downloader = new InstagramDownloader();
+
+                                $data = $downloader->getMedia($text, $type);
+
+                                if($data['ok']) {
+                                    $makeContentData = $this->createContentData($data, $chat_id);
+                                    $sent = $bot->$makeContentData['method']($makeContentData['content']);
+                                    if(!$sent['ok']) {
+                                        $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+
+                                        $bot->sendMessage([
+                                            'chat_id' => $chat_id,
+                                            'text' => Text::where(['key' => 'unable_to_download_video', 'lang_code' => $user->lang_code])->first()->value
+                                        ]);
+                                        Log::error('Error while sending media: ', $sent);
+                                        exit;
+                                    } else {
+                                        DownloadedMedia::create($sent, $text, $data['caption'], $chat_id, 1);
+                                        $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                        exit;
+                                    }
+                                } else {
+                                    $bot->sendMessage([
+                                        'chat_id' => $chat_id,
+                                        'text' => Text::where(['key' => 'invalid_url', 'lang_code' => $user->lang_code])->first()->value
+                                    ]);
+                                    $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                    exit;
+                                }
+                            }
+                        } elseif(strpos($text, 'tiktok.com') !== false) {
+                            $progress_msg_id = $bot->sendMessage([
+                                'chat_id' => $chat_id,
+                                'text' => Text::where(['key' => 'progress_text', 'lang_code' => $user->lang_code])->first()->value
+                            ])['result']['message_id'];
+
+                            $ad_text = "\n\n" . Text::where(['key' => 'ad_text', 'lang_code' => $user->lang_code])->first()->value;
+
+                            $downloadedMedia = DownloadedMedia::getMediaOrFalse($text, 3);
+                            if($downloadedMedia) {
+                                $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
+                                $makeContentData = $this->createContentData($data, $chat_id);
+                                $bot->$makeContentData['method']($makeContentData['content']);
+
+                                $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                exit;
+                            } else {
+
+                                $downloader = new TikTokDownloader();
+
+                                $data = $downloader->getMedia($text);
+
+                                if($data['ok']) {
+                                    $makeContentData = $this->createContentData($data, $chat_id);
+                                    $sent = $bot->$makeContentData['method']($makeContentData['content']);
+                                    if(!$sent['ok']) {
+                                        $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+
+                                        $bot->sendMessage([
+                                            'chat_id' => $chat_id,
+                                            'text' => Text::where(['key' => 'unable_to_download_video', 'lang_code' => $user->lang_code])->first()->value
+                                        ]);
+                                        Log::error('Error while sending media: ', $sent);
+                                        exit;
+                                    } else {
+                                        DownloadedMedia::create($sent, $text, $data['caption'], $chat_id, 3);
+                                        $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                        exit;
+                                    }
+                                } else {
+                                    $bot->sendMessage([
+                                        'chat_id' => $chat_id,
+                                        'text' => Text::where(['key' => 'invalid_url', 'lang_code' => $user->lang_code])->first()->value
+                                    ]);
+                                    $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                    exit;
+                                }
+                            }
+                        } elseif(strpos($text, 'facebook.com') !== false) {
+                            $progress_msg_id = $bot->sendMessage([
+                                'chat_id' => $chat_id,
+                                'text' => Text::where(['key' => 'progress_text', 'lang_code' => $user->lang_code])->first()->value
+                            ])['result']['message_id'];
+
+                            $ad_text = "\n\n" . Text::where(['key' => 'ad_text', 'lang_code' => $user->lang_code])->first()->value;
+
+                            $downloadedMedia = DownloadedMedia::getMediaOrFalse($text, 2);
+                            if($downloadedMedia) {
+                                $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
+                                $makeContentData = $this->createContentData($data, $chat_id);
+                                $bot->$makeContentData['method']($makeContentData['content']);
+
+                                $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                exit;
+                            } else {
+                                $downloader = new FacebookDownloader();
+
+                                $data = $downloader->getMedia($text);
+
+                                if($data['ok']) {
+                                    $makeContentData = $this->createContentData($data, $chat_id);
+                                    $sent = $bot->$makeContentData['method']($makeContentData['content']);
+                                    if(!$sent['ok']) {
+                                        $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+
+                                        $bot->sendMessage([
+                                            'chat_id' => $chat_id,
+                                            'text' => Text::where(['key' => 'unable_to_download_video', 'lang_code' => $user->lang_code])->first()->value
+                                        ]);
+                                        Log::error('Error while sending media: ', $sent);
+                                        exit;
+                                    } else {
+                                        DownloadedMedia::create($sent, $text, $data['caption'], $chat_id, 2);
+                                        $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                        exit;
+                                    }
+                                } else {
+                                    $bot->sendMessage([
+                                        'chat_id' => $chat_id,
+                                        'text' => Text::where(['key' => 'invalid_url', 'lang_code' => $user->lang_code])->first()->value
+                                    ]);
+                                    $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                    exit;
+                                }
+                            }
+                        } elseif(strpos($text, 'youtube.com') !== false) {
+                            $progress_msg_id = $bot->sendMessage([
+                                'chat_id' => $chat_id,
+                                'text' => Text::where(['key' => 'progress_text', 'lang_code' => $user->lang_code])->first()->value
+                            ])['result']['message_id'];
+
+                            $ad_text = "\n\n" . Text::where(['key' => 'ad_text', 'lang_code' => $user->lang_code])->first()->value;
+
+                            $downloadedMedia = DownloadedMedia::getMediaOrFalse($text, 5);
+                            if($downloadedMedia) {
+                                $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
+                                $makeContentData = $this->createContentData($data, $chat_id);
+                                $bot->$makeContentData['method']($makeContentData['content']);
+
+                                $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                exit;
+                            } else {
+
+                                $downloader = new YoutubeDownloader();
+
+                                $data = $downloader->getMedia($text);
+
+                                if($data['ok']) {
+                                    $makeContentData = $this->createContentData($data, $chat_id);
+                                    $sent = $bot->$makeContentData['method']($makeContentData['content']);
+                                    if(!$sent['ok']) {
+                                        $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+
+                                        $bot->sendMessage([
+                                            'chat_id' => $chat_id,
+                                            'text' => Text::where(['key' => 'unable_to_download_video', 'lang_code' => $user->lang_code])->first()->value
+                                        ]);
+                                        Log::error('Error while sending media: ', $sent);
+                                        exit;
+                                    } else {
+                                        DownloadedMedia::create($sent, $text, $data['caption'], $chat_id, 5);
+                                        $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                        exit;
+                                    }
+                                } else {
+                                    $bot->sendMessage([
+                                        'chat_id' => $chat_id,
+                                        'text' => Text::where(['key' => 'invalid_url', 'lang_code' => $user->lang_code])->first()->value
+                                    ]);
+                                    $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                    exit;
+                                }
+                            }
+                        } elseif(strpos($text, 'likee.video') !== false) {
+                            $progress_msg_id = $bot->sendMessage([
+                                'chat_id' => $chat_id,
+                                'text' => Text::where(['key' => 'progress_text', 'lang_code' => $user->lang_code])->first()->value
+                            ])['result']['message_id'];
+
+                            $ad_text = "\n\n" . Text::where(['key' => 'ad_text', 'lang_code' => $user->lang_code])->first()->value;
+
+                            $downloadedMedia = DownloadedMedia::getMediaOrFalse($text, 4);
+                            if($downloadedMedia) {
+                                $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
+                                $makeContentData = $this->createContentData($data, $chat_id);
+                                $bot->$makeContentData['method']($makeContentData['content']);
+
+                                $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                exit;
+                            } else {
+                                $downloader = new LikeeDownloader();
+
+                                $data = $downloader->getMedia($text);
+
+                                if($data['ok']) {
+                                    $makeContentData = $this->createContentData($data, $chat_id);
+                                    $sent = $bot->$makeContentData['method']($makeContentData['content']);
+                                    if(!$sent['ok']) {
+                                        $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+
+                                        $bot->sendMessage([
+                                            'chat_id' => $chat_id,
+                                            'text' => Text::where(['key' => 'unable_to_download_video', 'lang_code' => $user->lang_code])->first()->value
+                                        ]);
+                                        Log::error('Error while sending media: ', $sent);
+                                        exit;
+                                    } else {
+                                        DownloadedMedia::create($sent, $text, $data['caption'], $chat_id, 4);
+                                        $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                        exit;
+                                    }
+                                } else {
+                                    $bot->sendMessage([
+                                        'chat_id' => $chat_id,
+                                        'text' => Text::where(['key' => 'invalid_url', 'lang_code' => $user->lang_code])->first()->value
+                                    ]);
+                                    $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                    exit;
+                                }
+                            }
+                        } elseif(strpos($text, 'pin.it') !== false) {
+                            $progress_msg_id = $bot->sendMessage([
+                                'chat_id' => $chat_id,
+                                'text' => Text::where(['key' => 'progress_text', 'lang_code' => $user->lang_code])->first()->value
+                            ])['result']['message_id'];
+
+                            $ad_text = "\n\n" . Text::where(['key' => 'ad_text', 'lang_code' => $user->lang_code])->first()->value;
+
+                            $downloadedMedia = DownloadedMedia::getMediaOrFalse($text, 6);
+                            if($downloadedMedia) {
+                                $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
+                                $makeContentData = $this->createContentData($data, $chat_id);
+                                $bot->$makeContentData['method']($makeContentData['content']);
+
+                                $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                exit;
+                            } else {
+
+                                $downloader = new PinterestDownloader();
+
+                                $data = $downloader->getMedia($text);
+
+                                if($data['ok']) {
+                                    $makeContentData = $this->createContentData($data, $chat_id);
+                                    $sent = $bot->$makeContentData['method']($makeContentData['content']);
+                                    if(!$sent['ok']) {
+                                        $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+
+                                        $bot->sendMessage([
+                                            'chat_id' => $chat_id,
+                                            'text' => Text::where(['key' => 'unable_to_download_video', 'lang_code' => $user->lang_code])->first()->value
+                                        ]);
+                                        Log::error('Error while sending media: ', $sent);
+                                        exit;
+                                    } else {
+                                        DownloadedMedia::create($sent, $text, $data['caption'], $chat_id, 6);
+                                        $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                        exit;
+                                    }
+                                } else {
+                                    $bot->sendMessage([
+                                        'chat_id' => $chat_id,
+                                        'text' => Text::where(['key' => 'invalid_url', 'lang_code' => $user->lang_code])->first()->value
+                                    ]);
+                                    $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
+                                    exit;
+                                }
+                            }
                         }
-
-                        // Example usage
-
 
                     }
                 }
