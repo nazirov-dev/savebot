@@ -116,6 +116,19 @@ class PrivateChat extends Controller
                                 ])
                             ]);
                         return response()->json(['ok' => true], 200);
+                    } elseif($text == '/lang') {
+                        $langs = Lang::where(['status' => 1])->get()->toArray();
+                        $keyboard = [];
+                        $select_text = "";
+                        foreach($langs as $lang) {
+                            $keyboard[] = [['text' => $lang['name'], 'callback_data' => 'lang_' . $lang['short_code']]];
+                            $select_text .= Text::where(['key' => 'select_language', 'lang_code' => $lang['short_code']])->first()->value . "\n";
+                        }
+                        $bot->sendMessage([
+                            'chat_id' => $chat_id,
+                            'text' => $select_text,
+                            'reply_markup' => $bot->buildInlineKeyBoard($keyboard)
+                        ]);
                     }
                 }
                 // if ($text == 'a') {
