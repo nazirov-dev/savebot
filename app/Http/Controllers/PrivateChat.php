@@ -129,6 +129,20 @@ class PrivateChat extends Controller
                             'text' => $select_text,
                             'reply_markup' => $bot->buildInlineKeyBoard($keyboard)
                         ]);
+                    } else {
+                        if(strpos($text, 'instagram.com') !== false) {
+                            if(strpos($text, '/reels/') !== false) {
+                                $text = str_replace('/reels/', '/reel/', $text);
+                            }
+                            $type = strpos($text, '/stories/') !== false ? 'story' : 'post';
+                            $downloader = new InstagramDownloader();
+
+                            $media = $downloader->getMedia($text);
+                        }
+
+                        // Example usage
+
+
                     }
                 }
                 // if ($text == 'a') {
