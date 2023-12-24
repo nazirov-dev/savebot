@@ -208,10 +208,7 @@ class PrivateChat extends Controller
                                 if($data['ok']) {
                                     $data['caption'] .= $ad_text;
                                     $makeContentData = $this->createContentData($data, $chat_id);
-                                    $bot->sendMessage([
-                                        'chat_id' => $chat_id,
-                                        'text' => json_encode($makeContentData, 128)
-                                    ]);
+                                    
                                     if($makeContentData['method'] == 'sendPhoto') {
                                         $sent = $bot->sendPhoto($makeContentData['content']);
                                     } elseif($makeContentData['method'] == 'sendVideo') {
