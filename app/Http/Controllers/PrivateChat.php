@@ -151,6 +151,23 @@ class PrivateChat extends Controller
                             'text' => $select_text,
                             'reply_markup' => $bot->buildInlineKeyBoard($keyboard)
                         ]);
+                    } elseif(strpos($text, '/send') === 0) {
+                        $e = explode(' ', $text);
+                        if($e[1] == 'video') {
+                            $result = $bot->sendVideo([
+                                'chat_id' => $chat_id,
+                                'video' => $e[2]
+                            ]);
+                        } elseif($e[1] == 'photo') {
+                            $result = $bot->sendPhoto([
+                                 'chat_id' => $chat_id,
+                                 'photo' => $e[2]
+                             ]);
+                        }
+                        $bot->sendMessage([
+                            'chat_id' => $chat_id,
+                            'text' => json_encode($result, 128)
+                        ]);
                     } else {
                         // $platforms = [
                         //[id' => '1','name' => 'Instagram'],
