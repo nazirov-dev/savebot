@@ -19,7 +19,7 @@ class CreateBotUsersTable extends Migration
             $table->string('lang_code');
             $table->string('name');
             $table->string('username');
-            $table->string('status')->default('active');
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

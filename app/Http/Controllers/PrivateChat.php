@@ -57,6 +57,14 @@ class PrivateChat extends Controller
                     'text' => $select_text,
                     'reply_markup' => $bot->buildInlineKeyBoard($keyboard)
                 ]);
+                if(!$user) {
+                    BotUser::create([
+                        'user_id' => $chat_id,
+                        'name' => $bot->FirstName(),
+                        'username' => $bot->Username(),
+                        'status' => false
+                    ]);
+                }
                 return response()->json(['ok' => true], 200);
             }
             $chech_subsicription = $this->check_user_subscribed_to_channels($bot, $chat_id);

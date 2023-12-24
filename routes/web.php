@@ -35,26 +35,26 @@ Route::post('/sendMedia', function (Request $request) {
 })->name('sendMedia');
 
 
-Route::post('/send-notification', function (Request $request) {
-    $data = $request->all();
-    SendMessageToAllUsers::dispatch($data);
-    // $process = new Process(['php', 'artisan', 'queue:work'], timeout: 0);
-    // $process->start();
-    // litespeed_finish_request();
-    Artisan::call('queue:work --stop-when-empty');
-    $bot = new TelegramService();
-    $bot->sendMessage([
-        'chat_id' => env('ADMIN_ID'),
-        'text' => Artisan::output() . var_export($data, true)
-    ]);
+// Route::post('/send-notification', function (Request $request) {
+//     $data = $request->all();
+//     SendMessageToAllUsers::dispatch($data);
+//     // $process = new Process(['php', 'artisan', 'queue:work'], timeout: 0);
+//     // $process->start();
+//     // litespeed_finish_request();
+//     Artisan::call('queue:work --stop-when-empty');
+//     $bot = new TelegramService();
+//     $bot->sendMessage([
+//         'chat_id' => env('ADMIN_ID'),
+//         'text' => Artisan::output() . var_export($data, true)
+//     ]);
 
-    return response()->json(['ok' => true], 200);
-})->name('send-notification');
+//     return response()->json(['ok' => true], 200);
+// })->name('send-notification');
 
-Route::get('/stop-bulk-send', function () {
-    $n = NotificationStatus::where(['id' => 1])->first();
-    $n->status = 'stopped';
-    $n->log = json_encode(['message' => "Xabar yuborish admin tomonidan majburan to'xtalildi."]);
-    $n->save();
-    return response()->json(["ok" => true], 200);
-})->name('stop-sending');
+// Route::get('/stop-bulk-send', function () {
+//     $n = NotificationStatus::where(['id' => 1])->first();
+//     $n->status = 'stopped';
+//     $n->log = json_encode(['message' => "Xabar yuborish admin tomonidan majburan to'xtalildi."]);
+//     $n->save();
+//     return response()->json(["ok" => true], 200);
+// })->name('stop-sending');
