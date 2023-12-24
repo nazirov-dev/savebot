@@ -191,7 +191,12 @@ class PrivateChat extends Controller
                                 $data = $downloader->getMedia($text, $type);
 
                                 if($data['ok']) {
-                                    $data['caption'] .= $ad_text;
+                                    if(isset($data['caption'])) {
+                                        $data['caption'] .= $ad_text;
+                                    } else {
+                                        $data['caption'] = $ad_text;
+                                    }
+
                                     $makeContentData = $this->createContentData($data, $chat_id);
 
                                     if($makeContentData['method'] == 'sendPhoto') {
@@ -253,7 +258,11 @@ class PrivateChat extends Controller
                                 $data = $downloader->getMedia($text);
 
                                 if($data['ok']) {
-                                    $data['caption'] .= $ad_text;
+                                    if(isset($data['caption'])) {
+                                        $data['caption'] .= $ad_text;
+                                    } else {
+                                        $data['caption'] = $ad_text;
+                                    }
                                     $makeContentData = $this->createContentData($data, $chat_id);
                                     if($makeContentData['method'] == 'sendPhoto') {
                                         $sent = $bot->sendPhoto($makeContentData['content']);
@@ -313,7 +322,11 @@ class PrivateChat extends Controller
                                 $data = $downloader->getMedia($text);
 
                                 if($data['ok']) {
-                                    $data['caption'] .= $ad_text;
+                                    if(isset($data['caption'])) {
+                                        $data['caption'] .= $ad_text;
+                                    } else {
+                                        $data['caption'] = $ad_text;
+                                    }
                                     $makeContentData = $this->createContentData($data, $chat_id);
                                     if($makeContentData['method'] == 'sendPhoto') {
                                         $sent = $bot->sendPhoto($makeContentData['content']);
@@ -374,7 +387,11 @@ class PrivateChat extends Controller
                                 $data = $downloader->getMedia($text);
 
                                 if($data['ok']) {
-                                    $data['caption'] .= $ad_text;
+                                    if(isset($data['caption'])) {
+                                        $data['caption'] .= $ad_text;
+                                    } else {
+                                        $data['caption'] = $ad_text;
+                                    }
                                     $makeContentData = $this->createContentData($data, $chat_id);
                                     if($makeContentData['method'] == 'sendPhoto') {
                                         $sent = $bot->sendPhoto($makeContentData['content']);
@@ -434,7 +451,11 @@ class PrivateChat extends Controller
                                 $data = $downloader->getMedia($text);
 
                                 if($data['ok']) {
-                                    $data['caption'] .= $ad_text;
+                                    if(isset($data['caption'])) {
+                                        $data['caption'] .= $ad_text;
+                                    } else {
+                                        $data['caption'] = $ad_text;
+                                    }
                                     $makeContentData = $this->createContentData($data, $chat_id);
                                     if($makeContentData['method'] == 'sendPhoto') {
                                         $sent = $bot->sendPhoto($makeContentData['content']);
@@ -495,7 +516,11 @@ class PrivateChat extends Controller
                                 $data = $downloader->getMedia($text);
 
                                 if($data['ok']) {
-                                    $data['caption'] .= $ad_text;
+                                    if(isset($data['caption'])) {
+                                        $data['caption'] .= $ad_text;
+                                    } else {
+                                        $data['caption'] = $ad_text;
+                                    }
                                     $makeContentData = $this->createContentData($data, $chat_id);
                                     if($makeContentData['method'] == 'sendPhoto') {
                                         $sent = $bot->sendPhoto($makeContentData['content']);
