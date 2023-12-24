@@ -104,6 +104,7 @@ class PrivateChat extends Controller
                     }
                     return response()->json(['ok' => true], 200);
                 }
+
                 $chech_subsicription = $this->check_user_subscribed_to_channels($bot, $chat_id);
                 if($chech_subsicription !== true) {
                     $keyboard = [];
@@ -117,25 +118,8 @@ class PrivateChat extends Controller
                     ]);
                     return response()->json(['ok' => true], 200);
                 }
-                if ($update_type == 'callback_query') {
-                    if(strpos($text, 'lang_') === 0) {
-                        $new_lang = str_replace('lang_', '', $text);
-                        $bot->answerCallbackQuery([
-                            'callback_query_id' => $bot->Callback_ID(),
-                            'text' => Text::where(['key' => 'language_changed', 'lang_code' => $new_lang])->first()->value,
-                            'show_alert' => true
-                        ]);
-                        $bot->editMessageText([
-                            'chat_id' => $chat_id,
-                            'text' => Text::where(['key' => 'start_text', 'lang_code' => $new_lang])->first()->value,
-                            'message_id' => $bot->MessageID()
-                        ]);
-                        $user->lang_code = $new_lang;
-                        $user->status = true;
-                        $user->save();
-                        return response()->json(['ok' => true], 200);
-                    }
-                } elseif ($update_type == 'message') {
+
+                if ($update_type == 'message') {
                     if($text == '/start') {
                         $bot->sendMessage([
                             'chat_id' => $chat_id,
@@ -161,6 +145,7 @@ class PrivateChat extends Controller
                             $keyboard[] = [['text' => $lang['name'], 'callback_data' => 'lang_' . $lang['short_code']]];
                             $select_text .= Text::where(['key' => 'select_language', 'lang_code' => $lang['short_code']])->first()->value . "\n";
                         }
+                        $keyboard[] = [['text' => Text::where(['key' => 'cancel_button_label', 'lang_code' => $user->lang_code])->first()->value, 'callback_data' => '/start']];
                         $bot->sendMessage([
                             'chat_id' => $chat_id,
                             'text' => $select_text,
@@ -208,7 +193,7 @@ class PrivateChat extends Controller
                                 if($data['ok']) {
                                     $data['caption'] .= $ad_text;
                                     $makeContentData = $this->createContentData($data, $chat_id);
-                                    
+
                                     if($makeContentData['method'] == 'sendPhoto') {
                                         $sent = $bot->sendPhoto($makeContentData['content']);
                                     } elseif($makeContentData['method'] == 'sendVideo') {
@@ -544,6 +529,31 @@ class PrivateChat extends Controller
                             }
                         }
 
+                    }
+                } elseif ($update_type == 'callback_query') {
+                    if(strpos($text, 'lang_') === 0) {
+                        $new_lang = str_replace('lang_', '', $text);
+                        $bot->answerCallbackQuery([
+                            'callback_query_id' => $bot->Callback_ID(),
+                            'text' => Text::where(['key' => 'language_changed', 'lang_code' => $new_lang])->first()->value,
+                            'show_alert' => true
+                        ]);
+                        $bot->editMessageText([
+                            'chat_id' => $chat_id,
+                            'text' => Text::where(['key' => 'start_text', 'lang_code' => $new_lang])->first()->value,
+                            'message_id' => $bot->MessageID()
+                        ]);
+                        $user->lang_code = $new_lang;
+                        $user->status = true;
+                        $user->save();
+                        return response()->json(['ok' => true], 200);
+                    } elseif($text == '/start') {
+                        $bot->editMessageText([
+                            'chat_id' => $chat_id,
+                            'text' => Text::where(['key' => 'start_text', 'lang_code' => $user->lang_code])->first()->value,
+                            'message_id' => $bot->MessageID()
+                        ]);
+                        return response()->json(['ok' => true], 200);
                     }
                 }
                 // if ($text == 'a') {
