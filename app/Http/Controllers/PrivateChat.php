@@ -74,18 +74,18 @@ class PrivateChat extends Controller
 
     private function handleMediaFile($media)
     {
-        if ($media['type'] === 'video') {
-            // Download and store the video in the 'public' disk
-            $contents = file_get_contents($media['url']);
-            $parsedUrl = parse_url($media['url']);
-            $fileName = 'videos/' . basename($parsedUrl['path']);
-            Storage::disk('public')->put($fileName, $contents);
+        // if ($media['type'] === 'video') {
+        //     // Download and store the video in the 'public' disk
+        //     $contents = file_get_contents($media['url']);
+        //     $parsedUrl = parse_url($media['url']);
+        //     $fileName = 'videos/' . basename($parsedUrl['path']);
+        //     Storage::disk('public')->put($fileName, $contents);
 
-            // Get the absolute file path
-            $filePath = env('APP_URL') . Storage::url($fileName); // Path for server operations
+        //     // Get the absolute file path
+        //     $filePath = env('APP_URL') . Storage::url($fileName); // Path for server operations
 
-            return new \CURLFile($filePath);
-        }
+        //     return new \CURLFile($filePath);
+        // }
         return $media['url'];
     }
 
