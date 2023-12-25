@@ -206,7 +206,7 @@ class PrivateChat extends Controller
                                 $downloader = new InstagramDownloader();
 
                                 $data = $downloader->getMedia($text, $type);
-
+                                Log::info('Response: ', $data);
                                 if($data['ok']) {
                                     if(isset($data['caption'])) {
                                         $data['caption'] .= $ad_text;
