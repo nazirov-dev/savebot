@@ -89,8 +89,9 @@ class InstagramDownloader extends Controller
                             if($media['media_type'] == 1) {
                                 $type = 'photo';
                                 $url = $media['image_versions2']['candidates'][0]['url'];
-                            } elseif($media['media_type'] == 2) {
-                                $type = $media['has_audio'] ? 'video' : 'animation';
+                            } elseif($media['media_type'] == 2 && $media['has_audio']) {
+                                $type =  'video';
+                                // $type = $media['has_audio'] ? 'video' : 'animation';
                                 $url = $media['video_versions'][0]['url'];
                             } else {
                                 continue;
