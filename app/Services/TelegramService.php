@@ -9,21 +9,21 @@ class TelegramService
 {
     use HttpResponse;
 
-    const CHANNEL_POST = 'channel_post';
-    const CALLBACK_QUERY = 'callback_query';
-    const EDITED_MESSAGE = 'edited_message';
-    const INLINE_QUERY = 'inline_query';
-    const MESSAGE = 'message';
-    const PHOTO = 'photo';
-    const VIDEO = 'video';
-    const AUDIO = 'audio';
-    const VOICE = 'voice';
-    const CONTACT = 'contact';
-    const LOCATION = 'location';
-    const REPLY = 'reply';
-    const ANIMATION = 'animation';
-    const STICKER = 'sticker';
-    const DOCUMENT = 'document';
+    public const CHANNEL_POST = 'channel_post';
+    public const CALLBACK_QUERY = 'callback_query';
+    public const EDITED_MESSAGE = 'edited_message';
+    public const INLINE_QUERY = 'inline_query';
+    public const MESSAGE = 'message';
+    public const PHOTO = 'photo';
+    public const VIDEO = 'video';
+    public const AUDIO = 'audio';
+    public const VOICE = 'voice';
+    public const CONTACT = 'contact';
+    public const LOCATION = 'location';
+    public const REPLY = 'reply';
+    public const ANIMATION = 'animation';
+    public const STICKER = 'sticker';
+    public const DOCUMENT = 'document';
 
     private $bot_token = '';
     private $data = [];
@@ -43,10 +43,11 @@ class TelegramService
     {
         $url = 'https://api.telegram.org/bot' . $this->bot_token . '/' . $api;
 
-        if ($post)
+        if ($post) {
             $response = $this->sendAPIRequest($url, $content);
-        else
+        } else {
             $response = $this->sendAPIRequest($url, [], false);
+        }
 
         return $response;
     }
@@ -253,10 +254,11 @@ class TelegramService
 
     public function getData()
     {
-        if (empty($this->data))
+        if (empty($this->data)) {
             return json_decode(file_get_contents('php://input'), true);
-        else
+        } else {
             return $this->data;
+        }
     }
 
     public function setData(array $data)
@@ -267,68 +269,75 @@ class TelegramService
     public function Text()
     {
         $type = $this->getUpdateType();
-        if ($type == self::CALLBACK_QUERY)
+        if ($type == self::CALLBACK_QUERY) {
             return @$this->data['callback_query']['data'];
-        elseif ($type == self::CHANNEL_POST)
+        } elseif ($type == self::CHANNEL_POST) {
             return @$this->data['channel_post']['text'];
-        elseif ($type == self::EDITED_MESSAGE)
+        } elseif ($type == self::EDITED_MESSAGE) {
             return @$this->data['edited_message']['text'];
-        elseif (!isset($this->data['message']['text']) && isset($this->data['message']['contact']))
+        } elseif (!isset($this->data['message']['text']) && isset($this->data['message']['contact'])) {
             return @$this->data['message']['contact']['phone_number'];
-        else
+        } else {
             return (isset($this->data['message']['text'])) ? $this->data['message']['text'] : null;
+        }
     }
     public function getContactUserId()
     {
         $type = $this->getUpdateType();
-        if ($type == self::CONTACT)
+        if ($type == self::CONTACT) {
             return @$this->data['message']['contact']['user_id'];
-        else
+        } else {
             return  null;
+        }
     }
 
 
     public function getPhotoFileId()
     {
-        if ($this->getUpdateType() == self::PHOTO)
+        if ($this->getUpdateType() == self::PHOTO) {
             return $this->data['message']['photo'][count($this->data['message']['photo']) - 1]['file_id'];
-        else return null;
+        } else {
+            return null;
+        }
     }
     public function Caption(): string
     {
         $type = $this->getUpdateType();
-        if ($type == self::CHANNEL_POST)
+        if ($type == self::CHANNEL_POST) {
             return @$this->data['channel_post']['caption'];
-        else
+        } else {
             return @$this->data['message']['caption'];
+        }
     }
 
     public function ChatID(): string
     {
         $type = $this->getUpdateType();
-        if ($type == self::CALLBACK_QUERY)
+        if ($type == self::CALLBACK_QUERY) {
             return @$this->data['callback_query']['message']['chat']['id'];
-        elseif ($type == self::CHANNEL_POST)
+        } elseif ($type == self::CHANNEL_POST) {
             return @$this->data['channel_post']['chat']['id'];
-        elseif ($type == self::EDITED_MESSAGE)
+        } elseif ($type == self::EDITED_MESSAGE) {
             return @$this->data['edited_message']['chat']['id'];
-        elseif ($type == self::INLINE_QUERY)
+        } elseif ($type == self::INLINE_QUERY) {
             return @$this->data['inline_query']['from']['id'];
-        else
+        } else {
             return $this->data['message']['chat']['id'];
+        }
     }
 
     public function MessageID(): int
     {
         $type = $this->getUpdateType();
-        if ($type == self::CALLBACK_QUERY)
+        if ($type == self::CALLBACK_QUERY) {
             return @$this->data['callback_query']['message']['message_id'];
-        elseif ($type == self::CHANNEL_POST)
+        } elseif ($type == self::CHANNEL_POST) {
             return @$this->data['channel_post']['message_id'];
-        elseif ($type == self::EDITED_MESSAGE)
+        } elseif ($type == self::EDITED_MESSAGE) {
             return @$this->data['edited_message']['message_id'];
-        else
+        } else {
             return $this->data['message']['message_id'];
+        }
     }
 
     public function ReplyToMessageID()
@@ -379,40 +388,43 @@ class TelegramService
     public function FirstName(): string
     {
         $type = $this->getUpdateType();
-        if ($type == self::CALLBACK_QUERY)
+        if ($type == self::CALLBACK_QUERY) {
             return @$this->data['callback_query']['from']['first_name'];
-        elseif ($type == self::CHANNEL_POST)
+        } elseif ($type == self::CHANNEL_POST) {
             return @$this->data['channel_post']['from']['first_name'];
-        elseif ($type == self::EDITED_MESSAGE)
+        } elseif ($type == self::EDITED_MESSAGE) {
             return @$this->data['edited_message']['from']['first_name'];
-        else
+        } else {
             return isset($this->data['message']['from']['first_name']) ? $this->data['message']['from']['first_name'] : '';
+        }
     }
 
     public function LastName(): string
     {
         $type = $this->getUpdateType();
-        if ($type == self::CALLBACK_QUERY)
+        if ($type == self::CALLBACK_QUERY) {
             return @$this->data['callback_query']['from']['last_name'];
-        elseif ($type == self::CHANNEL_POST)
+        } elseif ($type == self::CHANNEL_POST) {
             return @$this->data['channel_post']['from']['last_name'];
-        elseif ($type == self::EDITED_MESSAGE)
+        } elseif ($type == self::EDITED_MESSAGE) {
             return @$this->data['edited_message']['from']['last_name'];
-        else
+        } else {
             return isset($this->data['message']['from']['last_name']) ? $this->data['message']['from']['last_name'] : '';
+        }
     }
 
     public function Username()
     {
         $type = $this->getUpdateType();
-        if ($type == self::CALLBACK_QUERY)
+        if ($type == self::CALLBACK_QUERY) {
             return @$this->data['callback_query']['from']['username'];
-        elseif ($type == self::CHANNEL_POST)
+        } elseif ($type == self::CHANNEL_POST) {
             return @$this->data['channel_post']['from']['username'];
-        elseif ($type == self::EDITED_MESSAGE)
+        } elseif ($type == self::EDITED_MESSAGE) {
             return @$this->data['edited_message']['from']['username'];
-        else
+        } else {
             return @$this->data['message']['from']['username'];
+        }
     }
 
     public function Location()
@@ -433,14 +445,15 @@ class TelegramService
     public function UserID(): string
     {
         $type = $this->getUpdateType();
-        if ($type == self::CALLBACK_QUERY)
+        if ($type == self::CALLBACK_QUERY) {
             return $this->data['callback_query']['from']['id'];
-        elseif ($type == self::CHANNEL_POST)
+        } elseif ($type == self::CHANNEL_POST) {
             return $this->data['channel_post']['from']['id'];
-        elseif ($type == self::EDITED_MESSAGE)
+        } elseif ($type == self::EDITED_MESSAGE) {
             return @$this->data['edited_message']['from']['id'];
-        else
+        } else {
             return $this->data['message']['from']['id'];
+        }
     }
 
     public function FromID()
@@ -455,18 +468,20 @@ class TelegramService
 
     public function messageFromGroup()
     {
-        if ($this->data['message']['chat']['type'] == 'private')
+        if ($this->data['message']['chat']['type'] == 'private') {
             return false;
-        else
+        } else {
             return true;
+        }
     }
 
     public function messageFromGroupTitle()
     {
-        if ($this->data['message']['chat']['type'] != 'private')
+        if ($this->data['message']['chat']['type'] != 'private') {
             return $this->data['message']['chat']['title'];
-        else
+        } else {
             return '';
+        }
     }
 
     public function buildKeyBoard(array $options, $onetime = false, $resize = false, $selective = true)
@@ -502,18 +517,19 @@ class TelegramService
         $replyMarkup = [
             'text' => $text,
         ];
-        if ($url != '')
+        if ($url != '') {
             $replyMarkup['url'] = $url;
-        elseif ($callback_data != '')
+        } elseif ($callback_data != '') {
             $replyMarkup['callback_data'] = $callback_data;
-        elseif (!is_null($switch_inline_query))
+        } elseif (!is_null($switch_inline_query)) {
             $replyMarkup['switch_inline_query'] = $switch_inline_query;
-        elseif (!is_null($switch_inline_query_current_chat))
+        } elseif (!is_null($switch_inline_query_current_chat)) {
             $replyMarkup['switch_inline_query_current_chat'] = $switch_inline_query_current_chat;
-        elseif ($callback_game != '')
+        } elseif ($callback_game != '') {
             $replyMarkup['callback_game'] = $callback_game;
-        elseif ($pay != '')
+        } elseif ($pay != '') {
             $replyMarkup['pay'] = $pay;
+        }
 
         return $replyMarkup;
     }
@@ -670,38 +686,39 @@ class TelegramService
     public function getUpdateType()
     {
         $update = $this->data;
-        if (isset($update['inline_query']))
+        if (isset($update['inline_query'])) {
             return self::INLINE_QUERY;
-        elseif (isset($update['callback_query']))
+        } elseif (isset($update['callback_query'])) {
             return self::CALLBACK_QUERY;
-        elseif (isset($update['edited_message']))
+        } elseif (isset($update['edited_message'])) {
             return self::EDITED_MESSAGE;
-        elseif (isset($update['message']['text']))
+        } elseif (isset($update['message']['text'])) {
             return self::MESSAGE;
-        elseif (isset($update['message']['photo']))
+        } elseif (isset($update['message']['photo'])) {
             return self::PHOTO;
-        elseif (isset($update['message']['video']))
+        } elseif (isset($update['message']['video'])) {
             return self::VIDEO;
-        elseif (isset($update['message']['audio']))
+        } elseif (isset($update['message']['audio'])) {
             return self::AUDIO;
-        elseif (isset($update['message']['voice']))
+        } elseif (isset($update['message']['voice'])) {
             return self::VOICE;
-        elseif (isset($update['message']['contact']))
+        } elseif (isset($update['message']['contact'])) {
             return self::CONTACT;
-        elseif (isset($update['message']['location']))
+        } elseif (isset($update['message']['location'])) {
             return self::LOCATION;
-        elseif (isset($update['message']['reply_to_message']))
+        } elseif (isset($update['message']['reply_to_message'])) {
             return self::REPLY;
-        elseif (isset($update['message']['animation']))
+        } elseif (isset($update['message']['animation'])) {
             return self::ANIMATION;
-        elseif (isset($update['message']['sticker']))
+        } elseif (isset($update['message']['sticker'])) {
             return self::STICKER;
-        elseif (isset($update['message']['document']))
+        } elseif (isset($update['message']['document'])) {
             return self::DOCUMENT;
-        elseif (isset($update['channel_post']))
+        } elseif (isset($update['channel_post'])) {
             return self::CHANNEL_POST;
-        else
+        } else {
             return false;
+        }
     }
 
     private function sendAPIRequest(string $url, array $content, bool $post = true): array
@@ -712,8 +729,15 @@ class TelegramService
                 unset($content['chat_id']);
             }
             $content['parse_mode'] = 'html';
-
-            $result = Http::withOptions(['verify' => false])->post($url, $content);
+            if(array_key_exists('has_video_attachment', $content)) {
+                $result = Http::attach(
+                    'video',
+                    file_get_contents($content['video']),
+                    basename($content['video'])
+                )->post($url, $content);
+            } else {
+                $result = Http::post($url, $content);
+            }
 
             if ($result->successful()) {
                 return $result->json();
