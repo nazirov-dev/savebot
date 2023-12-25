@@ -38,13 +38,13 @@ class PrivateChat extends Controller
 
     }
 
-    public function createContentData(array $data, int $chat_id): array
+    public function createContentData(array $data, int $chat_id, $is_already_downloaded = false): array
     {
         if ($data['medias_count'] == 1) {
             if($data['medias'][0]['type'][0] == 'v') { // type's first letter equals to v so it's video
                 $content = [
                     'chat_id' => $chat_id,
-                    $data['medias'][0]['type'] => $this->downloadMediaFile($data['medias'][0]),
+                    $data['medias'][0]['type'] => !$is_already_downloaded ? $this->downloadMediaFile($data['medias'][0]) : $data['medias'][0],
                     'has_video_attachment' => true,
                     'supports_streaming' => true
                 ];
@@ -217,8 +217,8 @@ class PrivateChat extends Controller
                             }
                             $downloadedMedia = DownloadedMedia::getMediaOrFalse($text, 1);
                             if($downloadedMedia) {
-                                $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['caption'] . $ad_text];
-                                $makeContentData = $this->createContentData($data, $chat_id);
+                                $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
+                                $makeContentData = $this->createContentData($data, $chat_id, true);
                                 if($makeContentData['method'] == 'sendPhoto') {
                                     $bot->sendPhoto($makeContentData['content']);
                                 } elseif($makeContentData['method'] == 'sendVideo') {
@@ -284,7 +284,7 @@ class PrivateChat extends Controller
                             $downloadedMedia = DownloadedMedia::getMediaOrFalse($text, 3);
                             if($downloadedMedia) {
                                 $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
-                                $makeContentData = $this->createContentData($data, $chat_id);
+                                $makeContentData = $this->createContentData($data, $chat_id, true);
                                 if($makeContentData['method'] == 'sendPhoto') {
                                     $bot->sendPhoto($makeContentData['content']);
                                 } elseif($makeContentData['method'] == 'sendVideo') {
@@ -349,7 +349,7 @@ class PrivateChat extends Controller
                             $downloadedMedia = DownloadedMedia::getMediaOrFalse($text, 2);
                             if($downloadedMedia) {
                                 $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
-                                $makeContentData = $this->createContentData($data, $chat_id);
+                                $makeContentData = $this->createContentData($data, $chat_id, true);
                                 if($makeContentData['method'] == 'sendPhoto') {
                                     $bot->sendPhoto($makeContentData['content']);
                                 } elseif($makeContentData['method'] == 'sendVideo') {
@@ -413,7 +413,7 @@ class PrivateChat extends Controller
                             $downloadedMedia = DownloadedMedia::getMediaOrFalse($text, 5);
                             if($downloadedMedia) {
                                 $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
-                                $makeContentData = $this->createContentData($data, $chat_id);
+                                $makeContentData = $this->createContentData($data, $chat_id, true);
                                 if($makeContentData['method'] == 'sendPhoto') {
                                     $bot->sendPhoto($makeContentData['content']);
                                 } elseif($makeContentData['method'] == 'sendVideo') {
@@ -478,7 +478,7 @@ class PrivateChat extends Controller
                             $downloadedMedia = DownloadedMedia::getMediaOrFalse($text, 4);
                             if($downloadedMedia) {
                                 $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
-                                $makeContentData = $this->createContentData($data, $chat_id);
+                                $makeContentData = $this->createContentData($data, $chat_id, true);
                                 if($makeContentData['method'] == 'sendPhoto') {
                                     $bot->sendPhoto($makeContentData['content']);
                                 } elseif($makeContentData['method'] == 'sendVideo') {
@@ -542,7 +542,7 @@ class PrivateChat extends Controller
                             $downloadedMedia = DownloadedMedia::getMediaOrFalse($text, 6);
                             if($downloadedMedia) {
                                 $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
-                                $makeContentData = $this->createContentData($data, $chat_id);
+                                $makeContentData = $this->createContentData($data, $chat_id, true);
                                 if($makeContentData['method'] == 'sendPhoto') {
                                     $bot->sendPhoto($makeContentData['content']);
                                 } elseif($makeContentData['method'] == 'sendVideo') {

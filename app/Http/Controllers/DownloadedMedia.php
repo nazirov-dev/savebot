@@ -21,7 +21,7 @@ class DownloadedMedia extends Controller
         //   );
         // Query to check if the media exists
         $media = Downloaded_Media::where(['platform_id' => $platform_id, 'url' => $url])
-            ->select('type', DB::raw('media_id as url'), DB::raw('description as caption'))
+            ->select('type', DB::raw('media_id as url'), 'description')
             ->get();
 
 
