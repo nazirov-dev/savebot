@@ -79,7 +79,7 @@ class PrivateChat extends Controller
             $contents = file_get_contents($media['url']);
             $parsedUrl = parse_url($media['url']);
             $fileName = 'videos/' . basename($parsedUrl['path']);
-            Storage::disk('local')->put($fileName, $contents);
+            Storage::disk('public')->put($fileName, $contents);
 
             // Check file size
             $filePath = storage_path('app/' . $fileName);
