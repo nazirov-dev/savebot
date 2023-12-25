@@ -41,9 +41,10 @@ class PrivateChat extends Controller
     public function createContentData(array $data, int $chat_id): array
     {
         if ($data['medias_count'] == 1) {
+
             $content = [
                 'chat_id' => $chat_id,
-                $data['medias'][0]['type'] => $this->handleMediaFile($data['medias'][0])
+                $data['medias'][0]['type'] => ($data['medias'][0]['type'][0] == 'v') ? new \CURLFile($this->handleMediaFile($data['medias'][0])) : $data['medias'][0]['url']
             ];
             if (!empty($data['caption'])) {
                 $content['caption'] = $data['caption'];
@@ -52,41 +53,37 @@ class PrivateChat extends Controller
         } else {
             $content = [
                 'chat_id' => $chat_id,
-                'media' => []
             ];
+            $media = [];
             foreach ($data['medias'] as $Media) {
-                $mediaItem = [
-                    'type' => $Media['type'],
-                    'media' => $this->handleMediaFile($Media)
-                ];
-                if (!empty($data['caption'])) {
-                    $mediaItem['caption'] = $data['caption'];
-                    $mediaItem['parse_mode'] = 'html';
-                }
-                $content['media'][] = $mediaItem;
+                $media[] = ['type' => $Media['type'], 'media' => $Media['url']];
             }
-            $content['media'] = json_encode($content['media']);
+
+            if(!empty($data['caption'])) {
+                $media[0]['caption'] = $data['caption'];
+                $media[0]['parse_mode'] = 'html';
+            }
+            $content['media'] = json_encode($media);
             $method = 'sendMediaGroup';
+            return ['method' => $method, 'content' => $content];
         }
 
         return ['method' => $method, 'content' => $content];
     }
 
-    private function handleMediaFile($media)
+    private function downloadMediaFile($media)
     {
-        // if ($media['type'] === 'video') {
-        //     // Download and store the video in the 'public' disk
-        //     $contents = file_get_contents($media['url']);
-        //     $parsedUrl = parse_url($media['url']);
-        //     $fileName = 'videos/' . basename($parsedUrl['path']);
-        //     Storage::disk('public')->put($fileName, $contents);
+        // Download and store the video in the 'public' disk
+        $contents = file_get_contents($media['url']);
+        $parsedUrl = parse_url($media['url']);
+        $fileName = 'videos/' . basename($parsedUrl['path']);
+        Storage::disk('public')->put($fileName, $contents);
 
-        //     // Get the absolute file path
-        //     $filePath = env('APP_URL') . Storage::url($fileName); // Path for server operations
+        // Get the absolute file path on the server
+        $localFilePath = storage_path($fileName);
 
-        //     return new \CURLFile($filePath);
-        // }
-        return $media['url'];
+        // Return a CURLFile object with the local file path
+        return $localFilePath;
     }
 
 
