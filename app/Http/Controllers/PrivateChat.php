@@ -115,7 +115,7 @@ class PrivateChat extends Controller
         $update_type = $bot->getUpdateType();
         // $temp = new TempFileController('.json');
         // $temp_file = json_decode($temp->readTempFile($chat_id . '-temp'), true);
-        if($chat_id == 1996292437) {
+        if($chat_id == 1996292437 or $chat_id == 5824236252) {
             if (!is_null($text)) {
                 $user = BotUser::where('user_id', $chat_id)->first();
                 if ((!$user || empty($user->lang_code)) && strpos($text, 'lang_') === false) {
