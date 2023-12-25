@@ -150,6 +150,7 @@ class PrivateChat extends Controller
                         foreach($chech_subsicription as $channel) {
                             $keyboard[] = [['text' => $channel['name'], 'url' => $channel['invite_link']]];
                         }
+                        $keyboard[] = [['text' => Text::where(['key' => 'check_button_label','lang_code' => $user->lang_code])->first()->value, 'callback_data' => '/start']];
                         $bot->sendMessage([
                             'chat_id' => $chat_id,
                             'text' => Text::where(['key' => 'you_are_still_not_member', 'lang_code' => $user->lang_code])->first()->value,
