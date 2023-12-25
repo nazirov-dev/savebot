@@ -71,15 +71,16 @@ class InstagramDownloader extends Controller
     {
         if ($type == 'post') {
             $Media = $this->downloadPost($url);
+            $result = [];
             if(is_array($Media)) {
                 if(isset($Media['status']) && $Media['status'] == 'ok' && isset($Media['items'])) {
                     $item = $Media['items'][0];
-                    if(isset($item['caption']) and !empty($item['caption']['text'])) {
-                        $result = ['caption' => $item['caption']['text']];
-                    } else {
-                        $result = [];
-                    }
                     if($item['media_type'] == 8 && $item['product_type'] == 'carousel_container') {
+                        if(isset($item['caption']) and !empty($item['caption']['text'])) {
+                            $result = ['caption' => $item['caption']['text']];
+                        } else {
+                            $result = [];
+                        }
                         $result['ok'] = true;
                         $result['medias'] = [];
                         $result['medias_count'] = 0;
@@ -99,11 +100,21 @@ class InstagramDownloader extends Controller
                         }
                         return $result;
                     } elseif($item['media_type'] == 1) {
+                        if(isset($item['caption']) and !empty($item['caption']['text'])) {
+                            $result = ['caption' => $item['caption']['text']];
+                        } else {
+                            $result = [];
+                        }
                         $result['ok'] = true;
                         $result['medias'][] = ['type' => 'photo', 'url' => $item['image_versions2']['candidates'][0]['url']];
                         $result['medias_count'] = 1;
                         return $result;
                     } elseif($item['media_type'] == 2) {
+                        if(isset($item['caption']) and !empty($item['caption']['text'])) {
+                            $result = ['caption' => $item['caption']['text']];
+                        } else {
+                            $result = [];
+                        }
                         $result['ok'] = true;
                         $result['medias'][] = ['type' => 'video', 'url' => $item['video_versions'][0]['url']];
                         $result['medias_count'] = 1;
