@@ -143,9 +143,9 @@ class PrivateChat extends Controller
                     return response()->json(['ok' => true], 200);
                 }
                 if(!empty($user->lang_code)) {
-
                     $chech_subsicription = $this->check_user_subscribed_to_channels($bot, $chat_id);
                     if($chech_subsicription !== true) {
+                        $bot->deleteMessage(['chat_id' => $chat_id, 'message_id' => $bot->MessageID()]);
                         $keyboard = [];
                         foreach($chech_subsicription as $channel) {
                             $keyboard[] = [['text' => $channel['name'], 'url' => $channel['invite_link']]];
