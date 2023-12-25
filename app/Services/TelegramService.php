@@ -730,10 +730,12 @@ class TelegramService
             }
             $content['parse_mode'] = 'html';
             if(array_key_exists('has_video_attachment', $content)) {
+                $video_url = $content['video'];
+                unset($content['video']);
                 $result = Http::attach(
                     'video',
-                    file_get_contents($content['video']),
-                    basename($content['video'])
+                    file_get_contents($video_url),
+                    basename($video_url)
                 )->post($url, $content);
             } else {
                 $result = Http::post($url, $content);
