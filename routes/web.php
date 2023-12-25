@@ -31,7 +31,15 @@ Route::get('/', function () {
 });
 
 Route::post('/sendMedia', function (Request $request) {
-    return response()->json(['ok' => false]);
+    $fileId = $request->input('file_id');
+    $type = $request->input('type');
+    $bot = new TelegramService();
+    if($type == 'photo') {
+        $sent = $bot->sendPhoto(['chat_id' => env('ADMIN_ID'), 'photo' => $fileId]);
+    } elseif($type == 'video') {
+        $sent = $bot->sendVideo(['chat_id' => env('ADMIN_ID'), 'video' => $fileId]);
+    }
+    return  response()->json(['ok' => $sent['ok'] ]);
 })->name('sendMedia');
 
 

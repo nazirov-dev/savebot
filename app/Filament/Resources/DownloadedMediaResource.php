@@ -62,34 +62,39 @@ class DownloadedMediaResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('url')
-                ->label('URL')
-                ->url(fn($record) => $record->url)
-                ->searchable(),
+                    ->label('URL')
+                    ->url(fn($record) => $record->url)
+                    ->searchable()
+                    ->limit(50),
 
-            Tables\Columns\TextColumn::make('media_id')
-                ->label('Media ID')
-                ->searchable(),
+                Tables\Columns\TextColumn::make('user_id')
+                    ->label('User ID')
+                    ->searchable()
+                    ->url(fn($record) => BotUserResource::getUrl('edit', ['record' => $record->user_id])),
 
-            Tables\Columns\TextColumn::make('user_id')
-                ->label('User ID')
-                ->searchable()
-                ->url(fn($record) => BotUserResource::getUrl('edit', ['record' => $record->user_id])),
+                Tables\Columns\TextColumn::make('description')
+                    ->label('Izoh')
+                    ->searchable()
+                    ->toggleable()
+                    ->limit(40),
 
-            Tables\Columns\TextColumn::make('platform_id')
-                ->label('Platforma ID')
-                ->searchable(),
+                Tables\Columns\TextColumn::make('platform_id')
+                    ->label('Platforma ID')
+                    ->searchable(),
 
-            Tables\Columns\TextColumn::make('media_group_id')
-                ->label('Media Group ID')
-                ->searchable(),
 
-            Tables\Columns\TextColumn::make('type')
-                ->label('Turi')
-                ->searchable(),
+                Tables\Columns\TextColumn::make('type')
+                    ->label('Turi')
+                    ->toggleable(),
 
-            Tables\Columns\TextColumn::make('description')
-                ->label('Izoh')
-                ->searchable()
+                Tables\Columns\TextColumn::make('media_id')
+                    ->label('Media ID')
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\TextColumn::make('media_group_id')
+                    ->label('Media Group ID')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable()
             ])
             ->filters([
                 //
