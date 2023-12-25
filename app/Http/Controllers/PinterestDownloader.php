@@ -35,7 +35,7 @@ class PinterestDownloader extends Controller
         if ($err) {
             return "cURL Error #:" . $err;
         } else {
-            return json_encode($response, true);
+            return json_decode($response, true);
         }
     }
 
