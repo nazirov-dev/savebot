@@ -133,7 +133,7 @@ class DownloadedMediaResource extends Resource
                                 ->color('danger')
                                 ->send();
                             }
-                            return "Fayl jo'natish";
+                            return null;
                         })
                         ->label("Fayl jo'natish")
                         ->modalSubmitAction(false)
