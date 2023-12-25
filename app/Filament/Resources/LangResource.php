@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\LangResource\Pages;
 use App\Filament\Resources\LangResource\RelationManagers;
 use App\Models\Lang;
+use App\Models\Text;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -46,7 +47,12 @@ class LangResource extends Resource
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\Action::make('delete')
+                        ->requiresConfirmation()
+                        ->action(function (Lang $record) {
+                            Text::where('lang_code', $record->short_code)->delete();
+                            $record->delete();
+                        }),
                     Tables\Actions\ViewAction::make()
                 ])
             ])

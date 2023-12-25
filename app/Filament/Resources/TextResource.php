@@ -36,6 +36,18 @@ class TextResource extends Resource
                 ->options($langs)
                 ->default($lang_code)
                 ->label('Tilni tanlang'),
+                    Forms\Components\TextInput::make('start_text')
+                        ->label('/start komandasidagi matn')
+                        ->hint("<b>🤖 Assalomu aleykum hurmatli foydalanuvchi, Bot orqali siz yuklab olishingiz mumkin:</b>
+
+• Instagram - stories, post va IGTV;
+• YouTube - video formatda;
+• TikTok - video;
+• Likee - video;
+• Pinterest - rasm, video va gif;
+• Facebook - video;
+
+<b>🚀 Media yuklash uchun shunchaki uning havolasini yuboring:</b>"),
                     Forms\Components\TextInput::make('subscribe_to_forced_channels')
                         ->label('Kanalga azo bo\'lish haqida matn')
                         ->hint("⚠️ Ushbu botdan foydalanish uchun quyidagi kanalga a’zo bo‘ling. Keyin <b>\"A’zo bo‘ldim ✅\"</b> tugmasini bosing."),
