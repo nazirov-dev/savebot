@@ -25,7 +25,7 @@ class PrivateChat extends Controller
                 'chat_id' => $channel['channel_id'],
                 'user_id' => $user_id
             ]);//['result']['status'];
-            Log::info('Info: ', $status);
+            Log::info('Info: ', [$status, $channel, $channels]);
             if (!in_array($status, ['administrator', 'creator', 'member'])) {
                 $not_subscribed_channels[] = $channel;
             }
