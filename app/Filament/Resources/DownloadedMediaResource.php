@@ -65,7 +65,7 @@ class DownloadedMediaResource extends Resource
                     ->label('URL')
                     ->url(fn($record) => $record->url)
                     ->searchable()
-                    ->limit(50),
+                    ->limit(40),
 
                 Tables\Columns\TextColumn::make('user_id')
                     ->label('User ID')
@@ -119,7 +119,7 @@ class DownloadedMediaResource extends Resource
                                         ->send();
                                 } else {
                                     Notification::make()
-                                        ->title('Mediani yuborib bo\'lmadi, telegram bilana qandaydir xatolik yuz berdi')
+                                        ->title('Mediani yuborib bo\'lmadi, telegram bilan qandaydir xatolik yuz berdi')
                                         ->danger()
                                         ->duration(10000)
                                         ->color('danger')

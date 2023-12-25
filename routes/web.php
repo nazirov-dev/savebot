@@ -39,7 +39,7 @@ Route::post('/sendMedia', function (Request $request) {
     } elseif($type == 'video') {
         $sent = $bot->sendVideo(['chat_id' => env('ADMIN_ID'), 'video' => $fileId]);
     }
-    return  response()->json(['ok' => $sent['ok'] ]);
+    return  response()->json(['ok' => $sent['ok']]);
 })->name('sendMedia');
 
 
