@@ -440,7 +440,7 @@ class PrivateChat extends Controller
                                     exit;
                                 }
                             }
-                        } elseif(strpos($text, 'likee.video') !== false) {
+                        } elseif(strpos($text, 'likee.video') !== false || strpos($text, 'likeevideo.com') !== false) {
                             $progress_msg_id = $bot->sendMessage([
                                 'chat_id' => $chat_id,
                                 'text' => Text::where(['key' => 'progress_text', 'lang_code' => $user->lang_code])->first()->value
