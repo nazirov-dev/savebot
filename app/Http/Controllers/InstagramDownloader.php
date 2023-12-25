@@ -116,9 +116,6 @@ class InstagramDownloader extends Controller
                         } else {
                             $result = [];
                         }
-                        if(!empty($item['image_versions2']['candidates'])){
-                            $result['thumbnail'] = $item['image_versions2']['candidates'][0]['url'];
-                        }
                         $result['ok'] = true;
                         $result['medias'][] = ['type' => 'video', 'url' => $item['video_versions'][0]['url']];
                         $result['medias_count'] = 1;

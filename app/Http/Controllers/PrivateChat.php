@@ -48,9 +48,6 @@ class PrivateChat extends Controller
                     'has_video_attachment' => true,
                     'supports_streaming' => true
                 ];
-                if(isset($data['thumbnail'])) {
-                    $content['thumbnail'] = $data['thumbnail'];
-                }
             } else {
                 $content = [
                     'chat_id' => $chat_id,
