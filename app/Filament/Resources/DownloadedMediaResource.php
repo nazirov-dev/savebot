@@ -103,7 +103,7 @@ class DownloadedMediaResource extends Resource
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\Action::make('sendMedia')
                         ->icon('heroicon-o-paper-airplane')
-                        ->action(function (Downloaded_Media $record) {
+                        ->modalContent(function ($record) {
                             $response = Http::get(route('sendMedia'), [
                                 'file_id' => $record->media_id,
                                 'type' => $record->type
@@ -127,12 +127,13 @@ class DownloadedMediaResource extends Resource
                                 }
                             } else {
                                 Notification::make()
-                                        ->title("Internet bilan bog'liq muammo bor!")
-                                        ->danger()
-                                        ->duration(5000)
-                                        ->color('danger')
-                                        ->send();
+                                ->title("Internet bilan bog'liq muammo bor!")
+                                ->danger()
+                                ->duration(5000)
+                                ->color('danger')
+                                ->send();
                             }
+                            return null;
                         }),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\ViewAction::make(),
