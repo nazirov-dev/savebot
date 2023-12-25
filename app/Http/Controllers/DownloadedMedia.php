@@ -37,7 +37,7 @@ class DownloadedMedia extends Controller
     public static function create(array $message, string $url, string|null $caption, int $user_id, int $platform_id): void
     {
         if(array_key_exists('message_id', $message['result'])) { // one media
-            $info = self::getMessageTypeAndMediaFileId($message);
+            $info = self::getMessageTypeAndMediaFileId($message['result']);
             Downloaded_Media::create([
                 'url' => $url,
                 'media_id' => $info['media_id'],
