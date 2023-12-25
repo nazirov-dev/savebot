@@ -82,7 +82,7 @@ class PrivateChat extends Controller
             Storage::disk('public')->put($fileName, $contents);
 
             // Get the absolute file path
-            $filePath = storage_path('app/public/' . $fileName); // Path for server operations
+            $filePath = storage_path($fileName); // Path for server operations
 
             // Check file size
             if (filesize($filePath) < 20971520) {
