@@ -11,6 +11,8 @@ use App\Models\BotUser;
 use App\Models\Text;
 use App\Models\Lang;
 use App\Models\Channel;
+use Illuminate\Support\Facades\Storage;
+
 
 class PrivateChat extends Controller
 {
@@ -39,34 +41,59 @@ class PrivateChat extends Controller
 
     public function createContentData(array $data, int $chat_id): array
     {
-        if($data['medias_count'] == 1) {
+        if ($data['medias_count'] == 1) {
             $content = [
                 'chat_id' => $chat_id,
-                $data['medias'][0]['type'] => $data['medias'][0]['url']
+                $data['medias'][0]['type'] => $this->handleMediaFile($data['medias'][0])
             ];
-            if(!empty($data['caption'])) {
+            if (!empty($data['caption'])) {
                 $content['caption'] = $data['caption'];
             }
             $method = 'send' . ucfirst($data['medias'][0]['type']);
-            return ['method' => $method, 'content' => $content];
         } else {
             $content = [
                 'chat_id' => $chat_id,
+                'media' => []
             ];
-            $media = [];
             foreach ($data['medias'] as $Media) {
-                $media[] = ['type' => $Media['type'], 'media' => $Media['url']];
+                $mediaItem = [
+                    'type' => $Media['type'],
+                    'media' => $this->handleMediaFile($Media)
+                ];
+                if (!empty($data['caption'])) {
+                    $mediaItem['caption'] = $data['caption'];
+                    $mediaItem['parse_mode'] = 'html';
+                }
+                $content['media'][] = $mediaItem;
             }
-
-            if(!empty($data['caption'])) {
-                $media[0]['caption'] = $data['caption'];
-                $media[0]['parse_mode'] = 'html';
-            }
-            $content['media'] = json_encode($media);
+            $content['media'] = json_encode($content['media']);
             $method = 'sendMediaGroup';
-            return ['method' => $method, 'content' => $content];
         }
+
+        return ['method' => $method, 'content' => $content];
     }
+
+    private function handleMediaFile($media)
+    {
+        if ($media['type'] === 'video') {
+            // Download and store the video
+            $contents = file_get_contents($media['url']);
+            $fileName = 'videos/' . basename($media['url']);
+            Storage::disk('local')->put($fileName, $contents);
+
+            // Check file size
+            $filePath = storage_path('app/' . $fileName);
+            if (filesize($filePath) > 20 * 1024 * 1024) {
+                // If larger than 20MB, use the file URL for Telegram
+                return Storage::url($fileName);
+            } else {
+                // If within the limit, use local file path
+                return 'attach://' . $fileName;
+            }
+        }
+        return $media['url'];
+    }
+
     public function handle($bot)
     {
         $bot->sendMessage([
