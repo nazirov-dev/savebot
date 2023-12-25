@@ -103,10 +103,11 @@ class DownloadedMediaResource extends Resource
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\Action::make('sendMedia')
                         ->icon('heroicon-o-paper-airplane')
-                        ->action(function ($record) {
-                            $response = Http::get(route('sendMedia'), [
+                        ->action(function (Downloaded_Media $record) {
+                            $response = Http::post(route('sendMedia'), [
                                 'file_id' => $record->media_id,
-                                'type' => $record->type
+                                'type' => $record->type,
+                                'description' => $record->description
                             ]);
                             if ($response->successful()) {
                                 $jsonData = $response->json();

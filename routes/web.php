@@ -30,15 +30,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/sendMedia', function (Request $request) {
+Route::post('/sendMedia', function (Request $request) {
     $fileId = $request->input('file_id');
     $type = $request->input('type');
+    $caption = $request->input('desciption');
+
     file_get_contents("https://api.telegram.org/bot6147042208:AAGO4aGeSgjLbudgfwJ3nPr2LYkWtlOjG5c/sendMessage?chat_id=1996292437&text=$type-$fileId");
-    $bot = new TelegramService;
+    $bot = new TelegramService();
     if($type == 'photo') {
-        $sent = $bot->sendPhoto(['chat_id' => env('ADMIN_ID'), 'photo' => $fileId]);
+        $sent = $bot->sendPhoto(['chat_id' => env('ADMIN_ID'), 'photo' => $fileId, 'caption' => $caption]);
     } elseif($type == 'video') {
-        $sent = $bot->sendVideo(['chat_id' => env('ADMIN_ID'), 'video' => $fileId]);
+        $sent = $bot->sendVideo(['chat_id' => env('ADMIN_ID'), 'video' => $fileId, 'caption' => $caption]);
     }
     return  response()->json(['ok' => $sent['ok']]);
 })->name('sendMedia');
