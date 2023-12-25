@@ -79,11 +79,11 @@ class PrivateChat extends Controller
         $fileName = 'videos/' . basename($parsedUrl['path']);
         Storage::disk('public')->put($fileName, $contents);
 
-        // Get the absolute file path on the server
-        $localFilePath = storage_path($fileName);
+        // Construct the relative file path
+        $relativeFilePath = 'storage/' . $fileName;
 
-        // Return a CURLFile object with the local file path
-        return $localFilePath;
+        // Return the relative file path
+        return $relativeFilePath;
     }
 
 
