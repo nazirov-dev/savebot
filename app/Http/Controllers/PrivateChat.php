@@ -399,7 +399,7 @@ class PrivateChat extends Controller
                                 exit;
                             } else {
 
-                                $downloader = new YoutubeDownloader();
+                                $downloader = new YouTubeDownloader();
 
                                 $data = $downloader->getMedia($text);
 
