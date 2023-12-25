@@ -80,7 +80,7 @@ class PrivateChat extends Controller
         Storage::disk('public')->put($fileName, $contents);
 
         // Construct the relative file path
-        $relativeFilePath = 'storage/' . $fileName;
+        $relativeFilePath = env('APP_URL') . '/storage/' . $fileName;
 
         // Return the relative file path
         return $relativeFilePath;
