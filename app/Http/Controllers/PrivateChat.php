@@ -75,24 +75,29 @@ class PrivateChat extends Controller
     private function handleMediaFile($media)
     {
         if ($media['type'] === 'video') {
-            // Download and store the video
+            // Download and store the video in the 'public' disk
             $contents = file_get_contents($media['url']);
             $parsedUrl = parse_url($media['url']);
             $fileName = 'videos/' . basename($parsedUrl['path']);
             Storage::disk('public')->put($fileName, $contents);
 
+            // Get the absolute file path
+            $filePath = storage_path('app/public/' . $fileName); // Path for server operations
+
             // Check file size
-            $filePath = public_path('storage/' . $fileName);
             if (filesize($filePath) < 20971520) {
-                // If larger than 20MB, use the file URL for Telegram
+                // If smaller than 20MB, use CURLFile with the absolute file path
+                // return Storage::disk('public')->url($fileName); // Public URL
                 return $media['url'];
+
             } else {
-                // If within the limit, use local file path
                 return new \CURLFile($filePath);
+                // If larger than 20MB, use the public URL for Telegram
             }
         }
         return $media['url'];
     }
+
 
     public function handle($bot)
     {
