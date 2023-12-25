@@ -85,14 +85,14 @@ class InstagramDownloader extends Controller
                         $result['medias'] = [];
                         $result['medias_count'] = 0;
                         foreach ($item['carousel_media'] as $media) {
-                            $type = $media['media_type'] == 1 ? 'photo' : 'video';
                             if($media['media_type'] == 1) {
                                 $type = 'photo';
                                 $url = $media['image_versions2']['candidates'][0]['url'];
                             } elseif($media['media_type'] == 2 && $media['has_audio']) {
-                                $type =  'video';
+                                $type = 'video';
                                 // $type = $media['has_audio'] ? 'video' : 'animation';
                                 $url = $media['video_versions'][0]['url'];
+
                             } else {
                                 continue;
                             }
@@ -115,6 +115,9 @@ class InstagramDownloader extends Controller
                             $result = ['caption' => $item['caption']['text']];
                         } else {
                             $result = [];
+                        }
+                        if(!empty($item['image_versions2']['candidates'])){
+                            $result['thumbnail'] = $item['image_versions2']['candidates'][0]['url'];
                         }
                         $result['ok'] = true;
                         $result['medias'][] = ['type' => 'video', 'url' => $item['video_versions'][0]['url']];

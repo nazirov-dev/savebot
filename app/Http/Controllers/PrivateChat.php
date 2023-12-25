@@ -41,13 +41,16 @@ class PrivateChat extends Controller
     public function createContentData(array $data, int $chat_id): array
     {
         if ($data['medias_count'] == 1) {
-
             if($data['medias'][0]['type'][0] == 'v') { // type's first letter equals to v so it's video
                 $content = [
                     'chat_id' => $chat_id,
                     $data['medias'][0]['type'] => $this->downloadMediaFile($data['medias'][0]),
-                    'has_video_attachment' => true
+                    'has_video_attachment' => true,
+                    'supports_streaming' => true
                 ];
+                if(isset($data['thumbnail'])) {
+                    $content['thumbnail'] = $data['thumbnail'];
+                }
             } else {
                 $content = [
                     'chat_id' => $chat_id,
