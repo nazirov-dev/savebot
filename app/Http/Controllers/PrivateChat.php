@@ -82,18 +82,12 @@ class PrivateChat extends Controller
             Storage::disk('public')->put($fileName, $contents);
 
             // Get the absolute file path
-            $filePath = storage_path($fileName); // Path for server operations
+            $filePath = Storage::url($fileName); // Path for server operations
 
             // Check file size
-            if (filesize($filePath) < 20971520) {
-                // If smaller than 20MB, use CURLFile with the absolute file path
-                // return Storage::disk('public')->url($fileName); // Public URL
-                return $media['url'];
 
-            } else {
-                return new \CURLFile($filePath);
-                // If larger than 20MB, use the public URL for Telegram
-            }
+            return new \CURLFile($filePath);
+            // If larger than 20MB, use the public URL for Telegram
         }
         return $media['url'];
     }
