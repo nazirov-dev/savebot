@@ -59,8 +59,8 @@ class PrivateChat extends Controller
             }
 
             if(!empty($data['caption'])) {
-                $content['media'][0]['caption'] = $data['caption'];
-                $content['media'][0]['parse_mode'] = 'html';
+                $content['medias'][0]['caption'] = $data['caption'];
+                $content['medias'][0]['parse_mode'] = 'html';
             }
             $content['media'] = json_encode($media);
             $method = 'sendMediaGroup';
@@ -206,7 +206,6 @@ class PrivateChat extends Controller
                                 $downloader = new InstagramDownloader();
 
                                 $data = $downloader->getMedia($text, $type);
-                                Log::info('Response: ', $data);
                                 if($data['ok']) {
                                     if(isset($data['caption'])) {
                                         $data['caption'] .= $ad_text;
