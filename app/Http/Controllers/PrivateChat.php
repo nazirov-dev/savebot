@@ -13,7 +13,6 @@ use App\Models\Lang;
 use App\Models\Channel;
 use Illuminate\Support\Facades\Storage;
 
-
 class PrivateChat extends Controller
 {
     public function __construct() {}
@@ -84,12 +83,12 @@ class PrivateChat extends Controller
 
             // Check file size
             $filePath = storage_path('app/' . $fileName);
-            if (filesize($filePath) < 20 * 1024 * 1024) {
+            if (filesize($filePath) < 20971520) {
                 // If larger than 20MB, use the file URL for Telegram
                 return $media['url'];
             } else {
                 // If within the limit, use local file path
-                return 'attach://' . $fileName;
+                return new \CURLFile($filePath);
             }
         }
         return $media['url'];
