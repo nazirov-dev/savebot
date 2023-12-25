@@ -59,8 +59,8 @@ class PrivateChat extends Controller
             }
 
             if(!empty($data['caption'])) {
-                $content['medias'][0]['caption'] = $data['caption'];
-                $content['medias'][0]['parse_mode'] = 'html';
+                $media[0]['caption'] = $data['caption'];
+                $media[0]['parse_mode'] = 'html';
             }
             $content['media'] = json_encode($media);
             $method = 'sendMediaGroup';
