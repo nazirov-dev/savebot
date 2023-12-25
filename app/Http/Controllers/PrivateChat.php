@@ -270,7 +270,7 @@ class PrivateChat extends Controller
                                 exit;
                             } else {
 
-                                $downloader = new TikTokDownloader();
+                                $downloader = new TiktokDownloader();
 
                                 $data = $downloader->getMedia($text);
 
