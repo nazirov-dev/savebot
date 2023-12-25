@@ -84,9 +84,9 @@ class PrivateChat extends Controller
 
             // Check file size
             $filePath = storage_path('app/' . $fileName);
-            if (filesize($filePath) > 20 * 1024 * 1024) {
+            if (filesize($filePath) < 20 * 1024 * 1024) {
                 // If larger than 20MB, use the file URL for Telegram
-                return Storage::url($fileName);
+                return $media['url'];
             } else {
                 // If within the limit, use local file path
                 return 'attach://' . $fileName;
