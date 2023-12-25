@@ -78,7 +78,8 @@ class PrivateChat extends Controller
         if ($media['type'] === 'video') {
             // Download and store the video
             $contents = file_get_contents($media['url']);
-            $fileName = 'videos/' . basename($media['url']);
+            $parsedUrl = parse_url($media['url']);
+            $fileName = 'videos/' . basename($parsedUrl['path']);
             Storage::disk('local')->put($fileName, $contents);
 
             // Check file size
