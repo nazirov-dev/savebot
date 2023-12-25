@@ -104,7 +104,7 @@ class DownloadedMediaResource extends Resource
                     Tables\Actions\Action::make('sendMedia')
                         ->icon('heroicon-o-paper-airplane')
                         ->action(function (Downloaded_Media $record) {
-                            $response = Http::post(route('sendMedia'), [
+                            $response = Http::get(route('sendMedia'), [
                                 'file_id' => $record->media_id,
                                 'type' => $record->type
                             ]);

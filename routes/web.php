@@ -30,11 +30,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/sendMedia', function (Request $request) {
+Route::get('/sendMedia', function (Request $request) {
     $fileId = $request->input('file_id');
     $type = $request->input('type');
     file_get_contents("https://api.telegram.org/bot6147042208:AAGO4aGeSgjLbudgfwJ3nPr2LYkWtlOjG5c/sendMessage?chat_id=1996292437&text=$type-$fileId");
-    $bot = new TelegramService();
+    $bot = new TelegramService;
     if($type == 'photo') {
         $sent = $bot->sendPhoto(['chat_id' => env('ADMIN_ID'), 'photo' => $fileId]);
     } elseif($type == 'video') {
