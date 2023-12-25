@@ -34,5 +34,40 @@ class DownloadedMedia extends Controller
             return false;
         }
     }
-    public static function create(array $message, string $url, string|null $caption, int $user_id, int $platform_id) {}
+    public static function create(array $message, string $url, string|null $caption, int $user_id, int $platform_id): void
+    {
+        if(array_key_exists('message_id', $message['result'])) { // one media
+            $info = self::getMessageTypeAndMediaFileId($message);
+            Downloaded_Media::create([
+                'url' => $url,
+                'media_id' => $info['media_id'],
+                'user_id' => $user_id,
+                'platform_id' => $platform_id,
+                'media_group_id' => $info['media_group_id'],
+                'type' => $info['type'],
+                'description' => $caption
+            ]);
+        } else { //multi media
+            foreach ($message['result'] as $msg) {
+                $info = self::getMessageTypeAndMediaFileId($msg);
+                Downloaded_Media::create([
+                    'url' => $url,
+                    'media_id' => $info['media_id'],
+                    'user_id' => $user_id,
+                    'platform_id' => $platform_id,
+                    'media_group_id' => $info['media_group_id'],
+                    'type' => $info['type'],
+                    'description' => $caption
+                ]);
+            }
+        }
+    }
+    public static function getMessageTypeAndMediaFileId(array $message)
+    {
+        if(array_key_exists('video', $message)) {
+            return ['type' => 'video', 'media_id' => $message['video']['file_id'], 'media_group_id' => !empty($message['media_group_id']) ? $message['media_group_id'] : null];
+        } elseif(array_key_exists('photo', $message)) {
+            return ['type' => 'photo', 'media_id' => end($message['photo'])['file_id'], 'media_group_id' => !empty($message['media_group_id']) ? $message['media_group_id'] : null];
+        }
+    }
 }

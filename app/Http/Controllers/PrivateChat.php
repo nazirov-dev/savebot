@@ -260,7 +260,7 @@ class PrivateChat extends Controller
                                         Log::error('Error while sending media: ', $sent);
                                         exit;
                                     } else {
-                                        DownloadedMedia::create($sent, $text, $data['caption'], $chat_id, 1);
+                                        DownloadedMedia::create($sent, $text, $data['caption'], $user->id, 1);
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                         exit;
                                     }
@@ -325,7 +325,7 @@ class PrivateChat extends Controller
                                         Log::error('Error while sending media: ', $sent);
                                         exit;
                                     } else {
-                                        DownloadedMedia::create($sent, $text, $data['caption'], $chat_id, 3);
+                                        DownloadedMedia::create($sent, $text, $data['caption'], $user->id, 3);
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                         exit;
                                     }
@@ -389,7 +389,7 @@ class PrivateChat extends Controller
                                         Log::error('Error while sending media: ', $sent);
                                         exit;
                                     } else {
-                                        DownloadedMedia::create($sent, $text, $data['caption'], $chat_id, 2);
+                                        DownloadedMedia::create($sent, $text, $data['caption'], $user->id, 2);
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                         exit;
                                     }
@@ -454,7 +454,7 @@ class PrivateChat extends Controller
                                         Log::error('Error while sending media: ', $sent);
                                         exit;
                                     } else {
-                                        DownloadedMedia::create($sent, $text, $data['caption'], $chat_id, 5);
+                                        DownloadedMedia::create($sent, $text, $data['caption'], $user->id, 5);
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                         exit;
                                     }
@@ -518,7 +518,7 @@ class PrivateChat extends Controller
                                         Log::error('Error while sending media: ', $sent);
                                         exit;
                                     } else {
-                                        DownloadedMedia::create($sent, $text, $data['caption'], $chat_id, 4);
+                                        DownloadedMedia::create($sent, $text, $data['caption'], $user->id, 4);
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                         exit;
                                     }
@@ -583,7 +583,7 @@ class PrivateChat extends Controller
                                         Log::error('Error while sending media: ', $sent);
                                         exit;
                                     } else {
-                                        DownloadedMedia::create($sent, $text, $data['caption'], $chat_id, 6);
+                                        DownloadedMedia::create($sent, $text, $data['caption'], $user->id, 6);
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                         exit;
                                     }
