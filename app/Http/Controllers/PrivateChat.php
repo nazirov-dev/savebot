@@ -42,12 +42,21 @@ class PrivateChat extends Controller
     {
         if ($data['medias_count'] == 1) {
             if($data['medias'][0]['type'][0] == 'v') { // type's first letter equals to v so it's video
-                $content = [
-                    'chat_id' => $chat_id,
-                    $data['medias'][0]['type'] => !$is_already_downloaded ? $this->downloadMediaFile($data['medias'][0]) : $data['medias'][0],
-                    'has_video_attachment' => true,
-                    'supports_streaming' => true
-                ];
+                if(!$is_already_downloaded) {
+                    $content = [
+                        'chat_id' => $chat_id,
+                        $data['medias'][0]['type'] => $this->downloadMediaFile($data['medias'][0]),
+                        'has_video_attachment' => true,
+                        'supports_streaming' => true
+                    ];
+                } else {
+                    $content = [
+                        'chat_id' => $chat_id,
+                        $data['medias'][0]['type'] => $data['medias'][0]['url'],
+                        'supports_streaming' => true
+                    ];
+
+                }
             } else {
                 $content = [
                     'chat_id' => $chat_id,
@@ -236,8 +245,10 @@ class PrivateChat extends Controller
                                 $data = $downloader->getMedia($text, $type);
                                 if($data['ok']) {
                                     if(isset($data['caption'])) {
+                                        $original_caption = $data['caption'];
                                         $data['caption'] .= $ad_text;
                                     } else {
+                                        $original_caption = null;
                                         $data['caption'] = $ad_text;
                                     }
 
@@ -260,7 +271,7 @@ class PrivateChat extends Controller
                                         Log::error('Error while sending media: ', $sent);
                                         exit;
                                     } else {
-                                        DownloadedMedia::create($sent, $text, $data['caption'], $user->id, 1);
+                                        DownloadedMedia::create($sent, $text, $original_caption, $user->id, 1);
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                         exit;
                                     }
@@ -303,8 +314,10 @@ class PrivateChat extends Controller
 
                                 if($data['ok']) {
                                     if(isset($data['caption'])) {
+                                        $original_caption = $data['caption'];
                                         $data['caption'] .= $ad_text;
                                     } else {
+                                        $original_caption = null;
                                         $data['caption'] = $ad_text;
                                     }
                                     $makeContentData = $this->createContentData($data, $chat_id);
@@ -325,7 +338,7 @@ class PrivateChat extends Controller
                                         Log::error('Error while sending media: ', $sent);
                                         exit;
                                     } else {
-                                        DownloadedMedia::create($sent, $text, $data['caption'], $user->id, 3);
+                                        DownloadedMedia::create($sent, $text, $original_caption, $user->id, 3);
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                         exit;
                                     }
@@ -367,8 +380,10 @@ class PrivateChat extends Controller
 
                                 if($data['ok']) {
                                     if(isset($data['caption'])) {
+                                        $original_caption = $data['caption'];
                                         $data['caption'] .= $ad_text;
                                     } else {
+                                        $original_caption = null;
                                         $data['caption'] = $ad_text;
                                     }
                                     $makeContentData = $this->createContentData($data, $chat_id);
@@ -389,7 +404,7 @@ class PrivateChat extends Controller
                                         Log::error('Error while sending media: ', $sent);
                                         exit;
                                     } else {
-                                        DownloadedMedia::create($sent, $text, $data['caption'], $user->id, 2);
+                                        DownloadedMedia::create($sent, $text, $original_caption, $user->id, 2);
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                         exit;
                                     }
@@ -432,8 +447,10 @@ class PrivateChat extends Controller
 
                                 if($data['ok']) {
                                     if(isset($data['caption'])) {
+                                        $original_caption = $data['caption'];
                                         $data['caption'] .= $ad_text;
                                     } else {
+                                        $original_caption = null;
                                         $data['caption'] = $ad_text;
                                     }
                                     $makeContentData = $this->createContentData($data, $chat_id);
@@ -454,7 +471,7 @@ class PrivateChat extends Controller
                                         Log::error('Error while sending media: ', $sent);
                                         exit;
                                     } else {
-                                        DownloadedMedia::create($sent, $text, $data['caption'], $user->id, 5);
+                                        DownloadedMedia::create($sent, $text, $original_caption, $user->id, 5);
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                         exit;
                                     }
@@ -496,8 +513,10 @@ class PrivateChat extends Controller
 
                                 if($data['ok']) {
                                     if(isset($data['caption'])) {
+                                        $original_caption = $data['caption'];
                                         $data['caption'] .= $ad_text;
                                     } else {
+                                        $original_caption = null;
                                         $data['caption'] = $ad_text;
                                     }
                                     $makeContentData = $this->createContentData($data, $chat_id);
@@ -518,7 +537,7 @@ class PrivateChat extends Controller
                                         Log::error('Error while sending media: ', $sent);
                                         exit;
                                     } else {
-                                        DownloadedMedia::create($sent, $text, $data['caption'], $user->id, 4);
+                                        DownloadedMedia::create($sent, $text, $original_caption, $user->id, 4);
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                         exit;
                                     }
@@ -561,8 +580,10 @@ class PrivateChat extends Controller
 
                                 if($data['ok']) {
                                     if(isset($data['caption'])) {
+                                        $original_caption = $data['caption'];
                                         $data['caption'] .= $ad_text;
                                     } else {
+                                        $original_caption = null;
                                         $data['caption'] = $ad_text;
                                     }
                                     $makeContentData = $this->createContentData($data, $chat_id);
@@ -583,7 +604,7 @@ class PrivateChat extends Controller
                                         Log::error('Error while sending media: ', $sent);
                                         exit;
                                     } else {
-                                        DownloadedMedia::create($sent, $text, $data['caption'], $user->id, 6);
+                                        DownloadedMedia::create($sent, $text, $original_caption, $user->id, 6);
                                         $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                         exit;
                                     }
