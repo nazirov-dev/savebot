@@ -47,7 +47,7 @@ class LangResource extends Resource
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make(),
-                    Tables\Actions\Action::make('delete')
+                    Tables\Actions\DeleteAction::make('delete')
                         ->requiresConfirmation()
                         ->action(function (Lang $record) {
                             Text::where('lang_code', $record->short_code)->delete();
