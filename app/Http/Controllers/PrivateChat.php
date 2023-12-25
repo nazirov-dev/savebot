@@ -42,12 +42,17 @@ class PrivateChat extends Controller
     {
         if ($data['medias_count'] == 1) {
 
-            $content = [
-                'chat_id' => $chat_id,
-                $data['medias'][0]['type'] => $data['medias'][0]['url']
-            ];
             if($data['medias'][0]['type'][0] == 'v') { // type's first letter equals to v so it's video
-                $content['has_video_attachment'] = true;
+                $content = [
+                    'chat_id' => $chat_id,
+                    $data['medias'][0]['type'] => $this->downloadMediaFile($data['medias'][0]),
+                    'has_video_attachment' => true
+                ];
+            } else {
+                $content = [
+                    'chat_id' => $chat_id,
+                    $data['medias'][0]['type'] => $data['medias'][0]['url']
+                ];
             }
             if (!empty($data['caption'])) {
                 $content['caption'] = $data['caption'];
