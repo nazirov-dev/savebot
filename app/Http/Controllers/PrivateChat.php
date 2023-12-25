@@ -217,7 +217,7 @@ class PrivateChat extends Controller
                             }
                             $downloadedMedia = DownloadedMedia::getMediaOrFalse($text, 1);
                             if($downloadedMedia) {
-                                $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['description'] . $ad_text];
+                                $data = ['medias' => $downloadedMedia, 'medias_count' => count($downloadedMedia), 'caption' => $downloadedMedia[0]['caption'] . $ad_text];
                                 $makeContentData = $this->createContentData($data, $chat_id);
                                 if($makeContentData['method'] == 'sendPhoto') {
                                     $bot->sendPhoto($makeContentData['content']);
