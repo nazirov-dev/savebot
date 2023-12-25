@@ -640,6 +640,22 @@ class PrivateChat extends Controller
                         $user->lang_code = $new_lang;
                         $user->status = true;
                         $user->save();
+                        $chech_subsicription = $this->check_user_subscribed_to_channels($bot, $chat_id);
+                        
+                        if($chech_subsicription !== true) {
+                            $bot->deleteMessage(['chat_id' => $chat_id, 'message_id' => $bot->MessageID()]);
+                            $keyboard = [];
+                            foreach($chech_subsicription as $channel) {
+                                $keyboard[] = [['text' => $channel['name'], 'url' => $channel['invite_link']]];
+                            }
+                            $keyboard[] = [['text' => Text::where(['key' => 'check_button_label','lang_code' => $user->lang_code])->first()->value, 'callback_data' => '/start']];
+                            $bot->sendMessage([
+                                'chat_id' => $chat_id,
+                                'text' => Text::where(['key' => 'you_are_still_not_member', 'lang_code' => $user->lang_code])->first()->value,
+                                'reply_markup' => $bot->buildInlineKeyBoard($keyboard)
+                                ]);
+                            return response()->json(['ok' => true], 200);
+                        }
                         return response()->json(['ok' => true], 200);
                     } elseif($text == '/start') {
                         $bot->editMessageText([
