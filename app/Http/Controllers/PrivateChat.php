@@ -84,10 +84,7 @@ class PrivateChat extends Controller
             // Get the absolute file path
             $filePath = env('APP_URL') . Storage::url($fileName); // Path for server operations
 
-            // Check file size
-
             return new \CURLFile($filePath);
-            // If larger than 20MB, use the public URL for Telegram
         }
         return $media['url'];
     }
