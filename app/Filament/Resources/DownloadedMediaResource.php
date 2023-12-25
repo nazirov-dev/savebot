@@ -103,7 +103,7 @@ class DownloadedMediaResource extends Resource
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\Action::make('sendMedia')
                         ->icon('heroicon-o-paper-airplane')
-                        ->modalContent(function ($record) {
+                        ->action(function ($record) {
                             $response = Http::get(route('sendMedia'), [
                                 'file_id' => $record->media_id,
                                 'type' => $record->type
@@ -133,11 +133,7 @@ class DownloadedMediaResource extends Resource
                                 ->color('danger')
                                 ->send();
                             }
-                            return null;
-                        })
-                        ->label("Fayl jo'natish")
-                        ->modalSubmitAction(false)
-                        ->modalCancelAction(false),
+                        }),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\DeleteAction::make()
