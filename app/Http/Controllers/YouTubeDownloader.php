@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class YouTubeDownloader extends Controller
 {
-    public function download(string $url): string | array
+    public function download(string $url): string | array | null
     {
 
         $curl = curl_init();

@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\Medium;
 
 class PinterestDownloader extends Controller
 {
-    public function download(string $url): array | string
+    public function download(string $url): string | array | null
     {
         $short_code = str_replace('https://pin.it/', '', $url);
         $curl = curl_init();

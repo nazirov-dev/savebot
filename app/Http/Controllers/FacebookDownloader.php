@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class FacebookDownloader extends Controller
 {
-    public function donwload(string $url): array | string
+    public function donwload(string $url): string | array | null
     {
 
         $curl = curl_init();

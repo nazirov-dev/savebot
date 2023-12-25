@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class InstagramDownloader extends Controller
 {
-    public function downloadPost($url): array | string
+    public function downloadPost($url): string | array | null
     {
 
         $curl = curl_init();
@@ -37,7 +37,7 @@ class InstagramDownloader extends Controller
             return json_decode($response, true);
         }
     }
-    public function downloadStory($url): array | string
+    public function downloadStory($url): string | array | null
     {
 
 
