@@ -133,8 +133,11 @@ class DownloadedMediaResource extends Resource
                                 ->color('danger')
                                 ->send();
                             }
-                            return null;
-                        }),
+                            return "Fayl jo'natish";
+                        })
+                        ->label("Fayl jo'natish")
+                        ->modalSubmitAction(false)
+                        ->modalCancelAction(false),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\DeleteAction::make()
