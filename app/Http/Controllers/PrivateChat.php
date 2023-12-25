@@ -24,7 +24,7 @@ class PrivateChat extends Controller
             $status = $bot->getChatMember([
                 'chat_id' => $channel['channel_id'],
                 'user_id' => $user_id
-            ]);//['result']['status'];
+            ])['result']['status'];
             Log::info('Info: ', [$status, $channel, $channels]);
             if (!in_array($status, ['administrator', 'creator', 'member'])) {
                 $not_subscribed_channels[] = $channel;
@@ -142,19 +142,21 @@ class PrivateChat extends Controller
                     }
                     return response()->json(['ok' => true], 200);
                 }
+                if(!empty($user->lang_code)) {
 
-                $chech_subsicription = $this->check_user_subscribed_to_channels($bot, $chat_id);
-                if($chech_subsicription !== true) {
-                    $keyboard = [];
-                    foreach($chech_subsicription as $channel) {
-                        $keyboard[] = [['text' => $channel['name'], 'url' => $channel['invite_link']]];
+                    $chech_subsicription = $this->check_user_subscribed_to_channels($bot, $chat_id);
+                    if($chech_subsicription !== true) {
+                        $keyboard = [];
+                        foreach($chech_subsicription as $channel) {
+                            $keyboard[] = [['text' => $channel['name'], 'url' => $channel['invite_link']]];
+                        }
+                        $bot->sendMessage([
+                            'chat_id' => $chat_id,
+                            'text' => Text::where(['key' => 'you_are_still_not_member', 'lang_code' => $user->lang_code])->first()->value,
+                            'reply_markup' => $bot->buildInlineKeyBoard($keyboard)
+                            ]);
+                        return response()->json(['ok' => true], 200);
                     }
-                    $bot->sendMessage([
-                        'chat_id' => $chat_id,
-                        'text' => Text::where(['key' => 'you_are_still_not_member', 'lang_code' => $user->lang_code])->first()->value,
-                        'reply_markup' => $bot->buildInlineKeyBoard($keyboard)
-                    ]);
-                    return response()->json(['ok' => true], 200);
                 }
 
                 if ($update_type == 'message') {
