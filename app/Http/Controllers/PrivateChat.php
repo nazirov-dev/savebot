@@ -82,7 +82,7 @@ class PrivateChat extends Controller
             Storage::disk('public')->put($fileName, $contents);
 
             // Check file size
-            $filePath = public_path($fileName);
+            $filePath = public_path('storage/' . $fileName);
             if (filesize($filePath) < 20971520) {
                 // If larger than 20MB, use the file URL for Telegram
                 return $media['url'];
