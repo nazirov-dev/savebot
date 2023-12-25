@@ -44,7 +44,7 @@ class PrivateChat extends Controller
 
             $content = [
                 'chat_id' => $chat_id,
-                $data['medias'][0]['type'] => ($data['medias'][0]['type'][0] == 'v') ? new \CURLFile($this->handleMediaFile($data['medias'][0])) : $data['medias'][0]['url']
+                $data['medias'][0]['type'] => ($data['medias'][0]['type'][0] == 'v') ? new \CURLFile($this->downloadMediaFile($data['medias'][0])) : $data['medias'][0]['url']
             ];
             if (!empty($data['caption'])) {
                 $content['caption'] = $data['caption'];
