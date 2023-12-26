@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DownloadedMediaResource\Pages;
 use App\Filament\Resources\DownloadedMediaResource\RelationManagers;
 use App\Models\Downloaded_Media;
+use App\Models\Platform;
 use Filament\Notifications\Notification;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -59,12 +60,16 @@ class DownloadedMediaResource extends Resource
     public static function table(Table $table): Table
     {
         $notification = "";
+        $platforms = Platform::pluck('name', 'id')
+            ->toArray();
+        define('PLATFORMS', $platforms);
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('url')
                     ->label('URL')
                     ->url(fn($record) => $record->url)
                     ->searchable()
+                    ->wrap()
                     ->limit(40),
 
                 Tables\Columns\TextColumn::make('user_id')
@@ -76,10 +81,14 @@ class DownloadedMediaResource extends Resource
                     ->label('Izoh')
                     ->searchable()
                     ->toggleable()
+                    ->limit(60)
                     ->wrap(),
 
                 Tables\Columns\TextColumn::make('platform_id')
-                    ->label('Platforma ID')
+                    ->label('Platforma')
+                    ->formatStateUsing(function ($record): string {
+                        return PLATFORMS[$record->id];
+                    })
                     ->searchable(),
 
 
