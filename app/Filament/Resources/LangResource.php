@@ -63,7 +63,8 @@ class LangResource extends Resource
             ])
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make()
-            ]);
+            ])
+            ->defaultSort('id', 'desc');
     }
 
     public static function getRelations(): array

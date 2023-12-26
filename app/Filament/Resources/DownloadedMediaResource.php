@@ -149,7 +149,8 @@ class DownloadedMediaResource extends Resource
                 Tables\Actions\CreateAction::make(),
             ])
             ->emptyStateHeading('Media fayl yuklab olinmagan')
-            ->emptyStateDescription("Botdan hali hech kim media fayl yuklab olmadi");
+            ->emptyStateDescription("Botdan hali hech kim media fayl yuklab olmadi")
+            ->defaultSort('id', 'desc');
     }
 
     public static function getRelations(): array

@@ -89,7 +89,9 @@ class BotUserResource extends Resource
             ])
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make()
-            ]);
+            ])
+            ->paginated([10, 25, 50, 100])
+            ->defaultSort('id', 'desc');
     }
 
     public static function getRelations(): array
