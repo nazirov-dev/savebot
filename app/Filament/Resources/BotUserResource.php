@@ -31,6 +31,9 @@ class BotUserResource extends Resource
         ->toArray();
         return $form
             ->schema([
+                    Forms\Components\TextInput::make('id')
+                        ->label('Foydalanuvchi tartib raqami')
+                        ->numeric(),
                     Forms\Components\TextInput::make('user_id')
                         ->label('Foydalanuvchi ID raqami')
                         ->numeric(),
@@ -58,7 +61,7 @@ class BotUserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                        ->label('Foydalanuvchi tartib raqami'),
+                        ->label('Tartib raqami'),
                 Tables\Columns\TextColumn::make('user_id')
                     ->label('Foydalanuvchi ID raqami'),
                 Tables\Columns\TextColumn::make('lang_code')
@@ -98,7 +101,8 @@ class BotUserResource extends Resource
                 Tables\Actions\CreateAction::make()
             ])
             ->paginated([10, 25, 50, 100])
-            ->defaultSort('id', 'desc');
+            ->defaultSort('id', 'desc')
+            ->heading('Foydalanuvchilar');
     }
 
     public static function getRelations(): array
