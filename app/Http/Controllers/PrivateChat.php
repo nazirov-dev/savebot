@@ -408,6 +408,12 @@ class PrivateChat extends Controller
                                 }
                             }
                         } elseif(strpos($text, 'youtube.com') !== false) {
+                            // Parse the URL and return its components
+                            $parsedUrl = parse_url($text);
+
+                            // Rebuild the URL without the query string
+                            $text = $parsedUrl['scheme'] . "://" . $parsedUrl['host'] . $parsedUrl['path'];
+
                             $progress_msg_id = $bot->sendMessage([
                                 'chat_id' => $chat_id,
                                 'text' => Text::where(['key' => 'progress_text', 'lang_code' => $user->lang_code])->first()->value
