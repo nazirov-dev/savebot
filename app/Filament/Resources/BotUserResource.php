@@ -61,7 +61,7 @@ class BotUserResource extends Resource
                 Tables\Columns\TextColumn::make('lang_code')
                     ->formatStateUsing(function ($record): string {
                         global $langs;
-                        return $langs[$record->lang__code];
+                        return $langs[$record->lang_code];
                     })
                     ->label('Tili'),
                 Tables\Columns\TextColumn::make('name')
