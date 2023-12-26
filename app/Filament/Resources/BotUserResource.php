@@ -52,6 +52,7 @@ class BotUserResource extends Resource
     {
         $langs = Lang::pluck('name', 'short_code')
             ->toArray();
+        define('LANG', $langs);
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
@@ -59,8 +60,8 @@ class BotUserResource extends Resource
                 Tables\Columns\TextColumn::make('user_id')
                     ->label('Foydalanuvchi ID raqami'),
                 Tables\Columns\TextColumn::make('lang_code')
-                    ->formatStateUsing(function ($record, $langs): string {
-                        return $langs[$record->lang_code];
+                    ->formatStateUsing(function ($record): string {
+                        return LANG[$record->lang_code];
                     })
                     ->label('Tili'),
                 Tables\Columns\TextColumn::make('name')

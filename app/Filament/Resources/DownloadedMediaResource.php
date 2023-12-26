@@ -76,7 +76,7 @@ class DownloadedMediaResource extends Resource
                     ->label('Izoh')
                     ->searchable()
                     ->toggleable()
-                    ->limit(40),
+                    ->wrap(),
 
                 Tables\Columns\TextColumn::make('platform_id')
                     ->label('Platforma ID')
