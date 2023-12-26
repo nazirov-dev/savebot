@@ -118,31 +118,35 @@ class DownloadedMediaResource extends Resource
                                 'type' => $record->type,
                                 'description' => $record->description
                             ]);
+
                             if ($response->successful()) {
                                 $jsonData = $response->json();
-                                if($jsonData['ok']) {
-                                    Notification::make()
-                                        ->title('Media telegram orqali sizga jo\'natildi')
-                                        ->success()
-                                        ->duration(5000)
-                                        ->color('success')
-                                        ->send();
+
+                                if ($jsonData['ok']) {
+                                    $title = 'Media telegram orqali sizga yuborildi';
+                                    $type = 'success';
+                                    $duration = 5000;
+                                    $color = 'success';
                                 } else {
-                                    Notification::make()
-                                        ->title('Mediani yuborib bo\'lmadi, telegram bilan qandaydir xatolik yuz berdi')
-                                        ->danger()
-                                        ->duration(10000)
-                                        ->color('danger')
-                                        ->send();
+                                    $title = 'Mediani yuborib bo\'lmadi, telegram bilan qandaydir xatolik yuz berdi.';
+                                    $type = 'danger';
+                                    $duration = 10000;
+                                    $color = 'danger';
                                 }
                             } else {
-                                Notification::make()
-                                ->title("Internet bilan bog'liq muammo bor!")
-                                ->danger()
-                                ->duration(5000)
-                                ->color('danger')
-                                ->send();
+                                $title = "Internet bilan bog'liq muammo bor!";
+                                $type = 'danger';
+                                $duration = 5000;
+                                $color = 'danger';
                             }
+
+                            Notification::make()
+                                ->title($title)
+                                ->{$type}()
+                                ->duration($duration)
+                                ->color($color)
+                                ->send();
+
                         }),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\ViewAction::make(),
