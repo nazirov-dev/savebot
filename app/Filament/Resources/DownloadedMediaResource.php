@@ -150,6 +150,7 @@ class DownloadedMediaResource extends Resource
             ])
             ->emptyStateHeading('Media fayl yuklab olinmagan')
             ->emptyStateDescription("Botdan hali hech kim media fayl yuklab olmadi")
+            ->paginated([10, 25, 50, 100])
             ->defaultSort('id', 'desc');
     }
 

@@ -58,7 +58,7 @@ class BotUserResource extends Resource
                         ->label('Foydalanuvchi tartib raqami'),
                 Tables\Columns\TextColumn::make('user_id')
                     ->label('Foydalanuvchi ID raqami'),
-                Tables\Columns\SelectColumn::make('lang_code')
+                Tables\Columns\TextColumn::make('lang_code')
                     ->options($langs)
                     ->disabled()
                     ->label('Tili'),
