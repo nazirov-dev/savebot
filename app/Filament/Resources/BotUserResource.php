@@ -74,7 +74,7 @@ class BotUserResource extends Resource
                 Tables\Columns\ToggleColumn::make('status')
                 ->label("Aktivmi?"),
 
-                Tables\Columns\TextColumn::make('status')
+                Tables\Columns\TextColumn::make('created_at')
                 ->label("Ro'yhatdan o'tgan vaqti")
             ])
             ->filters([
