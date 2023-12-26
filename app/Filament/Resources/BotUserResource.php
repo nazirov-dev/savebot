@@ -44,7 +44,9 @@ class BotUserResource extends Resource
                         ->label("Username"),
 
                     Forms\Components\Toggle::make('status')
-                    ->label("Aktivmi?")
+                    ->label("Aktivmi?"),
+
+                    Forms\Components\DateTimePicker::make('created_at')
             ]);
     }
 
