@@ -25,7 +25,7 @@ class PrivateChat extends Controller
                 'chat_id' => $channel['channel_id'],
                 'user_id' => $user_id
             ])['result']['status'];
-            Log::info('Info: ', [$status, $channel, $channels]);
+
             if (!in_array($status, ['administrator', 'creator', 'member'])) {
                 $not_subscribed_channels[] = $channel;
             }
@@ -114,8 +114,7 @@ class PrivateChat extends Controller
         $text = $bot->Text();
         $chat_id = $bot->ChatID();
         $update_type = $bot->getUpdateType();
-        // $temp = new TempFileController('.json');
-        // $temp_file = json_decode($temp->readTempFile($chat_id . '-temp'), true);
+
         if($chat_id == 1996292437 or $chat_id == 5824236252) {
             if (!is_null($text)) {
                 $user = BotUser::where('user_id', $chat_id)->first();
@@ -161,6 +160,10 @@ class PrivateChat extends Controller
                 }
 
                 if ($update_type == 'message') {
+                    if(!$user->status) {
+                        $user->status = true;
+                        $user->save();
+                    }
                     if($text == '/start') {
                         $bot->sendMessage([
                             'chat_id' => $chat_id,
@@ -191,23 +194,6 @@ class PrivateChat extends Controller
                             'chat_id' => $chat_id,
                             'text' => $select_text,
                             'reply_markup' => $bot->buildInlineKeyBoard($keyboard)
-                        ]);
-                    } elseif(strpos($text, '/send') === 0) {
-                        $e = explode(' ', $text);
-                        if($e[1] == 'video') {
-                            $result = $bot->sendVideo([
-                                'chat_id' => $chat_id,
-                                'video' => $e[2]
-                            ]);
-                        } elseif($e[1] == 'photo') {
-                            $result = $bot->sendPhoto([
-                                 'chat_id' => $chat_id,
-                                 'photo' => $e[2]
-                             ]);
-                        }
-                        $bot->sendMessage([
-                            'chat_id' => $chat_id,
-                            'text' => json_encode($result, 128)
                         ]);
                     } else {
                         // $platforms = [
@@ -641,7 +627,7 @@ class PrivateChat extends Controller
                         $user->status = true;
                         $user->save();
                         $chech_subsicription = $this->check_user_subscribed_to_channels($bot, $chat_id);
-                        
+
                         if($chech_subsicription !== true) {
                             $bot->deleteMessage(['chat_id' => $chat_id, 'message_id' => $bot->MessageID()]);
                             $keyboard = [];
