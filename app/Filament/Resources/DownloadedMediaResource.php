@@ -60,7 +60,7 @@ class DownloadedMediaResource extends Resource
     public static function table(Table $table): Table
     {
         $notification = "";
-        $platforms = Platform::pluck('name', 'id')
+        $platforms = Platform::where('status', 1)->pluck('name', 'id')
             ->toArray();
         define('PLATFORMS', $platforms);
         return $table
