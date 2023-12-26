@@ -87,7 +87,7 @@ class DownloadedMediaResource extends Resource
                 Tables\Columns\TextColumn::make('platform_id')
                     ->label('Platforma')
                     ->formatStateUsing(function ($record): string {
-                        return PLATFORMS[$record->id];
+                        return PLATFORMS[$record->platform_id];
                     })
                     ->searchable(),
 
