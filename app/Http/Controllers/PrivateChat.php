@@ -408,11 +408,35 @@ class PrivateChat extends Controller
                                 }
                             }
                         } elseif(strpos($text, 'youtube.com') !== false) {
-                            // Parse the URL and return its components
-                            $parsedUrl = parse_url($text);
+                            function processUrl($url)
+                            {
+                                $url = str_replace('www.', '', $url);
+                                // Parse the URL and return its components
+                                $parsedUrl = parse_url($url);
 
-                            // Rebuild the URL without the query string
-                            $text = $parsedUrl['scheme'] . "://" . $parsedUrl['host'] . $parsedUrl['path'];
+                                // Rebuild the base URL
+                                $baseUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . $parsedUrl['path'];
+
+                                // Check if there is a query string
+                                if (!empty($parsedUrl['query'])) {
+                                    // Parse the query string into an array
+                                    parse_str($parsedUrl['query'], $queryParams);
+
+                                    if (strpos($baseUrl, 'shorts') !== false) {
+                                        // For the first type, ignore the query parameters
+                                        return $baseUrl;
+                                    } elseif (strpos($baseUrl, 'watch') !== false) {
+                                        // For the second type, keep only the 'v' parameter
+                                        if (isset($queryParams['v'])) {
+                                            return $baseUrl . '?v=' . $queryParams['v'];
+                                        }
+                                    }
+                                }
+
+                                return $baseUrl;
+                            }
+
+                            $text = processUrl($text);
 
                             $progress_msg_id = $bot->sendMessage([
                                 'chat_id' => $chat_id,
