@@ -72,7 +72,10 @@ class BotUserResource extends Resource
                     ->url(fn($record) => "https://t.me/{$record->username}")
                     ->prefix('@'),
                 Tables\Columns\ToggleColumn::make('status')
-                ->label("Aktivmi?")
+                ->label("Aktivmi?"),
+
+                Tables\Columns\TextColumn::make('status')
+                ->label("Ro'yhatdan o'tgan vaqti")
             ])
             ->filters([
                 //
