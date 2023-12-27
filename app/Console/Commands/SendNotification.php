@@ -90,7 +90,7 @@ class SendNotification extends Command
                         $send_to = 'Barcha faol foydalanuvchilarga';
                     } else {
                         $lang = Lang::where(['short_code' => $Notification->filter_by_language])->first();
-                        $lang = $lang ? $lang->value : 'Nomalum til';
+                        $lang = $lang ? $lang->name : 'Nomalum til';
                         $send_to = $lang . ' tilini tanlagan faol foydalanuvchilarga';
                     }
                     $info_text = "✅ Yuborilganlar: {$Notification->sent} ta
@@ -179,7 +179,7 @@ class SendNotification extends Command
                                 $send_to = 'Barcha faol foydalanuvchilarga';
                             } else {
                                 $lang = Lang::where(['short_code' => $Notification->filter_by_language])->first();
-                                $lang = $lang ? $lang->value : 'Nomalum til';
+                                $lang = $lang ? $lang->name : 'Nomalum til';
                                 $send_to = $lang . ' tilini tanlagan faol foydalanuvchilarga';
                             }
 
@@ -240,7 +240,7 @@ class SendNotification extends Command
                                 $send_to = 'Barcha faol foydalanuvchilarga';
                             } else {
                                 $lang = Lang::where(['short_code' => $Notification->filter_by_language])->first();
-                                $lang = $lang ? $lang->value : 'Nomalum til';
+                                $lang = $lang ? $lang->name : 'Nomalum til';
                                 $send_to = $lang . ' tilini tanlagan faol foydalanuvchilarga';
                             }
 
