@@ -79,6 +79,7 @@ class SendNotification extends Command
                 $select_filter = $Notification->filter_by_language == '*' ? ['status' => true] : ['status' => true, 'lang_code' => $Notification->filter_by_language];
 
                 $users = BotUser::where($select_filter)->offset($NotificationStatus->last_user_index)->limit(env('SEND_PER_MINUTE', 200))->get();
+                Log::info('Filter: ', $select_filter);
 
                 if($users->isEmpty()) {
                     $number_of_attempts = $Notification->sent + $Notification->not_sent;
@@ -95,7 +96,7 @@ class SendNotification extends Command
                     $info_text = "✅ Yuborilganlar: {$Notification->sent} ta
 ❌ Yuborilmaganlar: {$Notification->not_sent} ta
 ⌛️ Xabar yuborish uchun ketgan vaqt: {$readable_left_time_text}.
-🎗️ Xabar yuborish turi: {$send_to}.
+🎗️ Xabar kimlarga yuboriladi: {$send_to}.
 
 📝 Xabar yuborish statusi: yakunlandi.
 ⌛ Yuborish boshlangan: {$Notification->created_at}
@@ -200,7 +201,6 @@ class SendNotification extends Command
                             $Notification->save();
                             $NotificationStatus->save();
                         } elseif($Notification->sending_type == 'forwardmessage') {
-                            $keyboard = (empty($Notification->keyboard) or $Notification->keyboard == 'empty') ? $bot->buildKeyBoardHide() : base64_decode($Notification->keyboard);
                             foreach ($users as $user) {
                                 $send_message = $bot->forwardMessage([
                                     'chat_id' => $user->user_id,
