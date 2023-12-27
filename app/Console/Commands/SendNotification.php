@@ -104,6 +104,7 @@ class SendNotification extends Command
                         'reply_to_message_id' => $Notification->admin_info_message_id
                     ]);
                     $Notification->status = 'completed';
+                    $Notification->sending_end_time = now();
                     $Notification->save();
                     $new_notification = Notification::where(['status' => 'waiting'])->first();
                     if($new_notification) {
