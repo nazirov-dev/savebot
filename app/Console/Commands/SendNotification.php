@@ -79,15 +79,22 @@ class SendNotification extends Command
                 $select_filter = $Notification->filter_by_language == '*' ? ['status' => true] : ['status' => true, 'lang_code' => $Notification->filter_by_language];
 
                 $users = BotUser::where($select_filter)->offset($NotificationStatus->last_user_index)->limit(env('SEND_PER_MINUTE', 200))->get();
+                $users2 = BotUser::where($select_filter)->offset($NotificationStatus->last_user_index)->limit(env('SEND_PER_MINUTE', 200))->get();
 
-                Log::info('Users: ', $users->toArray());
+                Log::info('Users: ', $users2->toArray());
 
                 if($users->isEmpty()) {
                     $number_of_attempts = $Notification->sent + $Notification->not_sent;
 
-                    $readable_left_time_text = $this->minToReadableTime(intval($number_of_attempts / env('SEND_PER_MINUTE')));
+                    $readable_left_time_text = $this->minToReadableTime($number_of_attempts > 0 ? intval($number_of_attempts / env('SEND_PER_MINUTE')) : 0);
 
-                    $send_to = ($Notification->filter_by_language == '*') ? 'Barcha faol foydalanuvchilarga' : Lang::where(['short_code' => $Notification->filter_by_language])->first()->value . ' tilini tanlagan faol foydalanuvchilarga';
+                    if ($Notification->filter_by_language == '*') {
+                        $send_to = 'Barcha faol foydalanuvchilarga';
+                    } else {
+                        $lang = Lang::where(['short_code' => $Notification->filter_by_language])->first();
+                        $lang = $lang ? $lang->value : 'Nomalum til';
+                        $send_to = $lang . ' tilini tanlagan faol foydalanuvchilarga';
+                    }
                     $info_text = "✅ Yuborilganlar: {$Notification->sent} ta
 ❌ Yuborilmaganlar: {$Notification->not_sent} ta
 ⌛️ Xabar yuborish uchun ketgan vaqt: {$readable_left_time_text}.
@@ -168,7 +175,7 @@ class SendNotification extends Command
                             $number_of_attempts = $Notification->sent + $Notification->not_sent;
                             $left = $all_active_users - $number_of_attempts;
 
-                            $readable_left_time_text = $this->minToReadableTime(intval($left / env('SEND_PER_MINUTE')));
+                            $readable_left_time_text = $this->minToReadableTime($number_of_attempts > 0 ? intval($number_of_attempts / env('SEND_PER_MINUTE')) : 0);
 
                             if ($Notification->filter_by_language == '*') {
                                 $send_to = 'Barcha faol foydalanuvchilarga';
@@ -230,7 +237,7 @@ class SendNotification extends Command
                             $number_of_attempts = $Notification->sent + $Notification->not_sent;
                             $left = $all_active_users - $number_of_attempts;
 
-                            $readable_left_time_text = $this->minToReadableTime(intval($left / env('SEND_PER_MINUTE')));
+                            $readable_left_time_text = $this->minToReadableTime($number_of_attempts > 0 ? intval($number_of_attempts / env('SEND_PER_MINUTE')) : 0);
 
                             if ($Notification->filter_by_language == '*') {
                                 $send_to = 'Barcha faol foydalanuvchilarga';
