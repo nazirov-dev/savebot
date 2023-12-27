@@ -130,7 +130,7 @@ class SendNotification extends Command
                     $ads_channel_id = env('ADS_TELEGRAM_CHANNEL_ID');
                     if($Notification->status == 'sending') {
                         if($Notification->sending_type == 'copymessage') {
-                            $keyboard = (empty($Notification->keyboard) or $Notification->keyboard == 'empty') ? null : base64_decode($Notification->keyboard);
+                            $keyboard = (empty($Notification->keyboard) or $Notification->keyboard == 'empty') ? json_encode(['']) : base64_decode($Notification->keyboard);
                             foreach ($users as $user) {
                                 $send_message = $bot->copyMessage([
                                     'chat_id' => $user->user_id,
@@ -186,7 +186,7 @@ class SendNotification extends Command
                             $Notification->save();
                             $NotificationStatus->save();
                         } elseif($Notification->sending_type == 'forwardmessage') {
-                            $keyboard = (empty($Notification->keyboard) or $Notification->keyboard == 'empty') ? null : base64_decode($Notification->keyboard);
+                            $keyboard = (empty($Notification->keyboard) or $Notification->keyboard == 'empty') ? $bot->buildKeyBoardHide() : base64_decode($Notification->keyboard);
                             foreach ($users as $user) {
                                 $send_message = $bot->forwardMessage([
                                     'chat_id' => $user->user_id,
