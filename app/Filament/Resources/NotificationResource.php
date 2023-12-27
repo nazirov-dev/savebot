@@ -112,9 +112,9 @@ class NotificationResource extends Resource
                     })
                     ->label("Xabar xolati"),
                 Tables\Columns\TextColumn::make('sent')
-                    ->label('Yuborilgan xabarlar soni'),
+                    ->label('Yuborildi'),
                 Tables\Columns\TextColumn::make('not_sent')
-                    ->label('Yuborilmagan xabarlar soni'),
+                    ->label('Yuborilmadi'),
                     Tables\Columns\TextColumn::make('sending_type')
                     ->label("Xabarni yuborish turi")
                     ->formatStateUsing(function ($record) {

@@ -578,7 +578,7 @@ class PrivateChat extends Controller
                                     exit;
                                 }
                             }
-                        } elseif(strpos($text, 'pin.it') !== false || strpos($text, 'pinterest.com')!==false) {
+                        } elseif(strpos($text, 'pin.it') !== false || strpos($text, 'pinterest.com') !== false) {
                             $progress_msg_id = $bot->sendMessage([
                                 'chat_id' => $chat_id,
                                 'text' => Text::where(['key' => 'progress_text', 'lang_code' => $user->lang_code])->first()->value
