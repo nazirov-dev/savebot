@@ -84,7 +84,7 @@ class SendNotification extends Command
 
                     $readable_left_time_text = $this->minToReadableTime(intval($number_of_attempts / env('SEND_PER_MINUTE')));
 
-                    $send_to = $Notification->filter_by_language == '*' ? 'Barcha faol foydalanuvchilarga' : Lang::where(['short_code' => $Notification->filter_by_language])->first()->value . ' tilini tanlagan faol foydalanuvchilarga';
+                    $send_to = ($Notification->filter_by_language == '*') ? 'Barcha faol foydalanuvchilarga' : Lang::where(['short_code' => $Notification->filter_by_language])->first()->value . ' tilini tanlagan faol foydalanuvchilarga';
                     $info_text = "✅ Yuborilganlar: {$Notification->sent} ta
 ❌ Yuborilmaganlar: {$Notification->not_sent} ta
 ⌛️ Xabar yuborish uchun ketgan vaqt: {$readable_left_time_text}.
@@ -167,7 +167,7 @@ class SendNotification extends Command
 
                             $readable_left_time_text = $this->minToReadableTime(intval($left / env('SEND_PER_MINUTE')));
 
-                            $send_to = $Notification->filter_by_language == '*' ? 'Barcha faol foydalanuvchilarga' : Lang::where(['short_code' => $Notification->filter_by_language])->first()->value . ' tilini tanlagan faol foydalanuvchilarga';
+                            $send_to = ($Notification->filter_by_language == '*') ? 'Barcha faol foydalanuvchilarga' : Lang::where(['short_code' => $Notification->filter_by_language])->first()->value . ' tilini tanlagan faol foydalanuvchilarga';
                             $info_text = "✅ Yuborilganlar: {$Notification->sent} ta
 ❌ Yuborilmaganlar: {$Notification->not_sent} ta
 ⌛️ Xabar yuborish tugatilishigacha qolgan vaqt: {$readable_left_time_text}.
