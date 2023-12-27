@@ -118,7 +118,7 @@ class SendNotification extends Command
                     if($new_notification) {
                         $send = $bot->sendMessage([
                             'chat_id' => $Notification->admin_chat_id,
-                            'text' => "<b>Yangi xabarni yuborish 1 daqiqadan so'ng boshlanadi ✅</b>\n\n<i><b>Ushbu xabarni o'chirmang!!!</b></i>"
+                            'text' => "<b>Keyingi xabarni yuborish 1 daqiqadan so'ng boshlanadi ✅</b>\n\n<i><b>Ushbu xabarni o'chirmang!!!</b></i>"
                         ]);
                         $new_notification->admin_info_message_id = $send['result']['message_id'];
                         $NotificationStatus->status = true;
