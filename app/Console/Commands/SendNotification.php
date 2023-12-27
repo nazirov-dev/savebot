@@ -59,6 +59,7 @@ class SendNotification extends Command
     public function handle()
     {
         $NotificationStatus = NotificationStatus::find(1);
+        var_dump($NotificationStatus);
         if($NotificationStatus->status) {
             if($NotificationStatus->telegram_retry_after_seconds > 0) {
                 if($NotificationStatus->telegram_retry_after_seconds <= 10) {
