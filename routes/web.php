@@ -30,6 +30,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('/stop-sending-notification/{notification_id}', function ($notification_id) {
+    $NotificationStatus = App\Models\NotificationStatus::find(1);
+    $Notification = App\Models\Notification::find($notification_id);
+    if($NotificationStatus->status and $NotificationStatus->notification_id == $notification_id) {
+        $NotificationStatus->status = false;
+        $NotificationStatus->save();
+    }
+    if($Notification->status == 'sending') {
+        $Notification->status = 'terminated';
+        $Notification->save();
+    }
+    return redirect()->route('filament.admin.pages.dashboard');
+})->name('stop-sending-notification');
+
 Route::post('/sendMedia', function (Request $request) {
     $fileId = $request->input('file_id');
     $type = $request->input('type');
