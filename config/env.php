@@ -1,0 +1,8 @@
+<?php
+
+return [
+    'ADMIN_ID' => env('ADMIN_ID', 1996292437),
+    'ADS_TELEGRAM_CHANNEL_ID' => env('ADS_TELEGRAM_CHANNEL_ID', -1001515347111),
+    'SEND_PER_MINUTE' => env('SEND_PER_MINUTE', 200),
+    'DEV_ID' => env('DEV_ID', 1996292437)
+    ];

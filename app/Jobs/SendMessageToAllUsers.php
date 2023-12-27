@@ -14,7 +14,10 @@ use Illuminate\Support\Facades\Log;
 
 class SendMessageToAllUsers implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -31,7 +34,7 @@ class SendMessageToAllUsers implements ShouldQueue
 
     public function updateNotificationStatus($notificationStatus, $totalSent, $totalNotSent, ?array $logEntries = null, ?string $status = null, $notification_id = null): void
     {
-         if (!is_null($notification_id)) {
+        if (!is_null($notification_id)) {
             $notificationStatus->notification_id = $notification_id;
         }
         $notificationStatus->sent = $totalSent;
@@ -56,8 +59,8 @@ class SendMessageToAllUsers implements ShouldQueue
     public function handle(): void
     {
         define('CHUNK_COUNT', 50);
-        $admin = env('ADMIN_ID', 1996292437);
-        $ads_channel = $this->postData['from_chat_id'] ?? env('ADS_TELEGRAM_CHANNEL', 1996292437);
+        $admin = config('env.ADMIN_ID', 1996292437);
+        $ads_channel = $this->postData['from_chat_id'] ?? config('env.ADS_TELEGRAM_CHANNEL');
         $bot = new TelegramService();
         $forwardResponse = $bot->forwardMessage([
             'chat_id' => $admin,
@@ -116,7 +119,7 @@ class SendMessageToAllUsers implements ShouldQueue
                     exit;
                 }
             }
-        } else if ($this->postData['sending_type'] == 'forward') {
+        } elseif ($this->postData['sending_type'] == 'forward') {
             try {
                 BotUser::select('user_id')->chunk(CHUNK_COUNT, function ($users) use (&$bot, &$microseconds_per_request, &$numMessagesNotSent, &$numMessagesSent, &$NotificationStatus) {
                     $this->checkProcessStopped($NotificationStatus);
@@ -129,7 +132,7 @@ class SendMessageToAllUsers implements ShouldQueue
                         $numMessagesSent += $result_of_send['ok'];
                         $numMessagesNotSent += !$result_of_send['ok'];
                         if (!$result_of_send['ok'] && $result_of_send['error_code'] == 429) {
-                            $this->updateNotificationStatus($NotificationStatus, $numMessagesSent, $numMessagesNotSent, ['message' => "Telegram cheklov qo'ydi, cheklovdan chiqish kutilmoqda"],  "pause");
+                            $this->updateNotificationStatus($NotificationStatus, $numMessagesSent, $numMessagesNotSent, ['message' => "Telegram cheklov qo'ydi, cheklovdan chiqish kutilmoqda"], "pause");
                             sleep($result_of_send['parameters']['retry_after']);
                         }
                         usleep($microseconds_per_request);

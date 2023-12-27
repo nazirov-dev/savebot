@@ -98,7 +98,7 @@ class PrivateChat extends Controller
         Storage::disk('public')->put($fileName, $contents);
 
         // Construct the relative file path
-        $relativeFilePath = env('APP_URL') . '/storage/' . $fileName;
+        $relativeFilePath = config('app.url') . '/storage/' . $fileName;
 
         // Return the relative file path
         return $relativeFilePath;
@@ -108,7 +108,7 @@ class PrivateChat extends Controller
     public function handle($bot)
     {
         $bot->sendMessage([
-            'chat_id' => env('ADMIN_ID'),
+            'chat_id' => config('env.ADMIN_ID'),
             'text' => json_encode($bot->getData(), 128)
         ]);
         $text = $bot->Text();

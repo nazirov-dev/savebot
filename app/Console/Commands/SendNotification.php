@@ -78,13 +78,13 @@ class SendNotification extends Command
 
                 $select_filter = $Notification->filter_by_language == '*' ? ['status' => true] : ['status' => true, 'lang_code' => $Notification->filter_by_language];
 
-                $users = BotUser::where($select_filter)->offset($NotificationStatus->last_user_index)->limit(env('SEND_PER_MINUTE', 200))->get();
+                $users = BotUser::where($select_filter)->offset($NotificationStatus->last_user_index)->limit(config('env.SEND_PER_MINUTE'))->get();
                 Log::info('Filter: ', $select_filter);
 
                 if($users->isEmpty()) {
                     $number_of_attempts = $Notification->sent + $Notification->not_sent;
 
-                    $readable_left_time_text = $this->minToReadableTime($number_of_attempts > 0 ? intval($number_of_attempts / env('SEND_PER_MINUTE')) : 0);
+                    $readable_left_time_text = $this->minToReadableTime($number_of_attempts > 0 ? intval($number_of_attempts / config('env.SEND_PER_MINUTE')) : 0);
 
                     if ($Notification->filter_by_language == '*') {
                         $send_to = 'Barcha faol foydalanuvchilarga';
@@ -135,7 +135,7 @@ class SendNotification extends Command
                     }
                     $NotificationStatus->save();
                 } else {
-                    $ads_channel_id = env('ADS_TELEGRAM_CHANNEL_ID');
+                    $ads_channel_id = config('env.ADS_TELEGRAM_CHANNEL_ID');
                     if($Notification->status == 'sending') {
                         if($Notification->sending_type == 'copymessage') {
                             $keyboard = (empty($Notification->keyboard) or $Notification->keyboard == 'empty') ? $bot->buildKeyBoardHide() : base64_decode($Notification->keyboard);
@@ -173,7 +173,7 @@ class SendNotification extends Command
                             $number_of_attempts = $Notification->sent + $Notification->not_sent;
                             $left = $all_active_users - $number_of_attempts;
 
-                            $readable_left_time_text = $this->minToReadableTime($number_of_attempts > 0 ? intval($number_of_attempts / env('SEND_PER_MINUTE')) : 0);
+                            $readable_left_time_text = $this->minToReadableTime($number_of_attempts > 0 ? intval($number_of_attempts / config('env.SEND_PER_MINUTE')) : 0);
 
                             if ($Notification->filter_by_language == '*') {
                                 $send_to = 'Barcha faol foydalanuvchilarga';
@@ -234,7 +234,7 @@ class SendNotification extends Command
                             $number_of_attempts = $Notification->sent + $Notification->not_sent;
                             $left = $all_active_users - $number_of_attempts;
 
-                            $readable_left_time_text = $this->minToReadableTime($number_of_attempts > 0 ? intval($number_of_attempts / env('SEND_PER_MINUTE')) : 0);
+                            $readable_left_time_text = $this->minToReadableTime($number_of_attempts > 0 ? intval($number_of_attempts / config('env.SEND_PER_MINUTE')) : 0);
 
                             if ($Notification->filter_by_language == '*') {
                                 $send_to = 'Barcha faol foydalanuvchilarga';

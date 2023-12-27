@@ -34,7 +34,7 @@ class NotificationResource extends Resource
                     ->numeric()
                     ->label("Admin telegram ID raqami")
                     ->helperText(new HtmlString("Telegram orqali xabar yuborilish xolatini bildirib turish uchun, avtomatik bazadagi asosiy admin ID raqami yoziladi agar boshqa admin bo'lmasa o'zgartirish shart emas!<br><b>Botga start bosgan bo'lishi shart!</b>"))
-                    ->default(env('ADMIN_ID'))
+                    ->default(config('env.ADMIN_ID'))
                     ->required(),
                 Forms\Components\TextInput::make('message_id')
                     ->numeric()
@@ -55,9 +55,9 @@ class NotificationResource extends Resource
                                 } else {
                                     $bot = new TelegramService();
                                     $send = $bot->forwardMessage([
-                                        'chat_id' => env('DEV_ID', 1996292437),
+                                        'chat_id' => config('env.DEV_ID'),
                                         'message_id' => $state,
-                                        'from_chat_id' => env('ADS_TELEGRAM_CHANNEL_ID')
+                                        'from_chat_id' => config('env.ADS_TELEGRAM_CHANNEL_ID')
                                     ]);
                                     if(isset($send['ok']) && $send['ok']) {
                                         FilamentNotification::make()

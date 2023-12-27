@@ -52,9 +52,9 @@ Route::post('/sendMedia', function (Request $request) {
 
     $bot = new TelegramService();
     if($type == 'photo') {
-        $sent = $bot->sendPhoto(['chat_id' => env('ADMIN_ID'), 'photo' => $fileId, 'caption' => $caption]);
+        $sent = $bot->sendPhoto(['chat_id' => config('env.ADMIN_ID'), 'photo' => $fileId, 'caption' => $caption]);
     } elseif($type == 'video') {
-        $sent = $bot->sendVideo(['chat_id' => env('ADMIN_ID'), 'video' => $fileId, 'caption' => $caption]);
+        $sent = $bot->sendVideo(['chat_id' => config('env.ADMIN_ID'), 'video' => $fileId, 'caption' => $caption]);
     }
     return  response()->json(['ok' => $sent['ok']]);
 })->name('sendMedia');
@@ -69,7 +69,7 @@ Route::post('/sendMedia', function (Request $request) {
 //     Artisan::call('queue:work --stop-when-empty');
 //     $bot = new TelegramService();
 //     $bot->sendMessage([
-//         'chat_id' => env('ADMIN_ID'),
+//         'chat_id' => config('env.ADMIN_ID'),
 //         'text' => Artisan::output() . var_export($data, true)
 //     ]);
 

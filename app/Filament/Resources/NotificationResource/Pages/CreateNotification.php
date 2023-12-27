@@ -16,8 +16,8 @@ class CreateNotification extends CreateRecord
     {
         $bot = new TelegramService();
         $message = $bot->forwardMessage([
-            'chat_id' => env('ADMIN_ID', 1996292437),
-            'from_chat_id' => env('ADS_TELEGRAM_CHANNEL_ID'),
+            'chat_id' => config('env.ADMIN_ID'),
+            'from_chat_id' => config('env.ADS_TELEGRAM_CHANNEL_ID'),
             'message_id' => $data['message_id']
         ]);
 
