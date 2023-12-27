@@ -45,7 +45,7 @@ class CreateNotification extends CreateRecord
             $NotificationStatus->notification_id = DB::selectOne(
                 "SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = ? AND table_schema = DATABASE()",
                 ['notifications']
-            )->AUTO_INCREMENT + 1;
+            )->AUTO_INCREMENT;
             $NotificationStatus->sent = 0;
             $NotificationStatus->not_sent = 0;
             $NotificationStatus->last_user_index = 0;
