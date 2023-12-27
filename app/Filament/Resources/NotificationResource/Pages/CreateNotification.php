@@ -6,7 +6,6 @@ use App\Filament\Resources\NotificationResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use App\Models\Notification;
-use App\Models\NotificationStatus;
 use Illuminate\Support\Facades\DB;
 use App\Services\TelegramService;
 
@@ -33,5 +32,9 @@ class CreateNotification extends CreateRecord
         $data['not_sent'] = 0;
         $data['sending_end_time'] = null;
         return $data;
+    }
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('create');
     }
 }
