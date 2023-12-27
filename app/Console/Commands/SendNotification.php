@@ -28,7 +28,7 @@ class SendNotification extends Command
     public function minToReadableTime($minutes = 0)
     {
         if ($minutes == 0) {
-            return '0 daqiqa';
+            return '1 daqiqa';
         }
 
         $days = intval(floor($minutes / 1440));
@@ -100,7 +100,8 @@ class SendNotification extends Command
                     ]);
                     $bot->sendMessage([
                         'chat_id' => $Notification->admin_chat_id,
-                        'text' => "Xabar yuborish yakunlandi ✅"
+                        'text' => "Xabar yuborish yakunlandi ✅",
+                        'reply_to_message_id' => $Notification->admin_info_message_id
                     ]);
                     $Notification->status = 'completed';
                     $Notification->save();
@@ -242,7 +243,26 @@ class SendNotification extends Command
                     }
                 }
             }
+        } else {
+            $bot = new TelegramService();
+            $new_notification = Notification::where(['status' => 'waiting'])->first();
+            if($new_notification) {
+                $send = $bot->sendMessage([
+                    'chat_id' => $new_notification->admin_chat_id,
+                    'text' => "<b>Xabar yuborish 1 daqiqadan so'ng boshlanadi ✅</b>\n\n<i><b>Ushbu xabarni o'chirmang!!!</b></i>"
+                ]);
+                $new_notification->admin_info_message_id = $send['result']['message_id'];
+                $NotificationStatus->status = true;
+                $NotificationStatus->notification_id = $new_notification->id;
+                $NotificationStatus->sent = 0;
+                $NotificationStatus->not_sent = 0;
+                $NotificationStatus->last_user_index = 0;
+                $NotificationStatus->telegram_retry_after_seconds = 0;
 
+                $new_notification->status = 'sending';
+                $new_notification->save();
+                $NotificationStatus->save();
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ return new class () extends Migration {
             $table->integer('admin_chat_id')->nullable();
             $table->integer('message_id')->nullable();
             $table->string('filter_by_language')->default('*');
-            $table->string('keyboard', 3000)->default(null)->nullable();
+            $table->string('keyboard', 15000)->default(null)->nullable();
             $table->integer('admin_info_message_id')->nullable();
             $table->integer('sent')->default(0);
             $table->integer('not_sent')->default(0);
