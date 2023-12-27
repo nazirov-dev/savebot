@@ -80,7 +80,7 @@ class SendNotification extends Command
 
                 $users = BotUser::where($select_filter)->offset($NotificationStatus->last_user_index)->limit(env('SEND_PER_MINUTE', 200))->get();
 
-                Log::info('Users: ', $users);
+                Log::info('Users: ', $users->toArray());
 
                 if($users->isEmpty()) {
                     $number_of_attempts = $Notification->sent + $Notification->not_sent;
