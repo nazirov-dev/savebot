@@ -105,7 +105,7 @@ class NotificationResource extends Resource
                         $status = [
                             'waiting' => "Navbatda kutilmoqda",
                             'sending' => "Xozirda jo'natilmoqda",
-                            'terminated' => "Yakunlanmasda, to'xtatilgan",
+                            'terminated' => "Yakunlanmasdan, to'xtatilgan",
                             'completed' => "Yuborish yakunlangan"
                         ];
                         return $status[$record->status];
