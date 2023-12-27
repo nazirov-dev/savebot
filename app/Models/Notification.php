@@ -9,6 +9,15 @@ class Notification extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'from_chat_id', 'message_id', 'sending_type', 'with_keyboard','created_at', 'updated_at'
+        'status',
+        'admin_chat_id', //
+        'message_id', //
+        'filter_by_language', //
+        'keyboard',
+        'admin_info_message_id',
+        'sent',
+        'not_sent',
+        'sending_type', //
+        'sending_end_time',
     ];
 }

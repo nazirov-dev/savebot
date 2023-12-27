@@ -211,6 +211,14 @@ class PrivateChat extends Controller
                             ])['result']['message_id'];
 
                             $ad_text = "\n\n" . Text::where(['key' => 'ad_text', 'lang_code' => $user->lang_code])->first()->value;
+
+                            $text = str_replace('www.', '', $text);
+                            // Parse the URL and return its components
+                            $parsedUrl = parse_url($text);
+
+                            // Rebuild the base URL
+                            $text = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . $parsedUrl['path'];
+
                             if(strpos($text, '/reels/') !== false) {
                                 $text = str_replace('/reels/', '/reel/', $text);
                             }
@@ -234,7 +242,7 @@ class PrivateChat extends Controller
 
                                 $data = $downloader->getMedia($text, $type);
                                 if($data['ok']) {
-                                    if(isset($data['caption'])) {
+                                    if(isset($data['caption']) and strlen($data['caption']) <= 1024) {
                                         $original_caption = $data['caption'];
                                         $data['caption'] .= $ad_text;
                                     } else {
@@ -303,7 +311,7 @@ class PrivateChat extends Controller
                                 $data = $downloader->getMedia($text);
 
                                 if($data['ok']) {
-                                    if(isset($data['caption'])) {
+                                    if(isset($data['caption']) and strlen($data['caption']) <= 1024) {
                                         $original_caption = $data['caption'];
                                         $data['caption'] .= $ad_text;
                                     } else {
@@ -369,7 +377,7 @@ class PrivateChat extends Controller
                                 $data = $downloader->getMedia($text);
 
                                 if($data['ok']) {
-                                    if(isset($data['caption'])) {
+                                    if(isset($data['caption']) and strlen($data['caption']) <= 1024) {
                                         $original_caption = $data['caption'];
                                         $data['caption'] .= $ad_text;
                                     } else {
@@ -466,7 +474,7 @@ class PrivateChat extends Controller
                                 $data = $downloader->getMedia($text);
 
                                 if($data['ok']) {
-                                    if(isset($data['caption'])) {
+                                    if(isset($data['caption']) and strlen($data['caption']) <= 1024) {
                                         $original_caption = $data['caption'];
                                         $data['caption'] .= $ad_text;
                                     } else {
@@ -532,7 +540,7 @@ class PrivateChat extends Controller
                                 $data = $downloader->getMedia($text);
 
                                 if($data['ok']) {
-                                    if(isset($data['caption'])) {
+                                    if(isset($data['caption']) and strlen($data['caption']) <= 1024) {
                                         $original_caption = $data['caption'];
                                         $data['caption'] .= $ad_text;
                                     } else {
@@ -599,7 +607,7 @@ class PrivateChat extends Controller
                                 $data = $downloader->getMedia($text);
 
                                 if($data['ok']) {
-                                    if(isset($data['caption'])) {
+                                    if(isset($data['caption']) and strlen($data['caption']) <= 1024) {
                                         $original_caption = $data['caption'];
                                         $data['caption'] .= $ad_text;
                                     } else {
