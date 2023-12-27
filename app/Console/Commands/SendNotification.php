@@ -79,9 +79,6 @@ class SendNotification extends Command
                 $select_filter = $Notification->filter_by_language == '*' ? ['status' => true] : ['status' => true, 'lang_code' => $Notification->filter_by_language];
 
                 $users = BotUser::where($select_filter)->offset($NotificationStatus->last_user_index)->limit(env('SEND_PER_MINUTE', 200))->get();
-                $users2 = BotUser::where($select_filter)->offset($NotificationStatus->last_user_index)->limit(env('SEND_PER_MINUTE', 200))->get();
-
-                Log::info('Users: ', $users2->toArray());
 
                 if($users->isEmpty()) {
                     $number_of_attempts = $Notification->sent + $Notification->not_sent;
