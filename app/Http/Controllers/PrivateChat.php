@@ -415,7 +415,7 @@ class PrivateChat extends Controller
                                     exit;
                                 }
                             }
-                        } elseif(strpos($text, 'youtube.com') !== false or strpos($text, 'youtu.be') !== false) {
+                        } elseif(strpos($text, 'youtube.com') !== false || strpos($text, 'youtu.be') !== false) {
                             function processUrl($url)
                             {
                                 $url = str_replace('www.', '', $url);
@@ -578,7 +578,7 @@ class PrivateChat extends Controller
                                     exit;
                                 }
                             }
-                        } elseif(strpos($text, 'pin.it') !== false) {
+                        } elseif(strpos($text, 'pin.it') !== false || strpos($text, 'pinterest.com')!==false) {
                             $progress_msg_id = $bot->sendMessage([
                                 'chat_id' => $chat_id,
                                 'text' => Text::where(['key' => 'progress_text', 'lang_code' => $user->lang_code])->first()->value
