@@ -415,7 +415,7 @@ class PrivateChat extends Controller
                                     exit;
                                 }
                             }
-                        } elseif(strpos($text, 'youtube.com') !== false) {
+                        } elseif(strpos($text, 'youtube.com') !== false or strpos($text, 'youtu.be') !== false) {
                             function processUrl($url)
                             {
                                 $url = str_replace('www.', '', $url);
