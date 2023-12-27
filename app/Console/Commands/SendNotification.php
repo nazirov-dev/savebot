@@ -59,7 +59,6 @@ class SendNotification extends Command
     public function handle()
     {
         $NotificationStatus = NotificationStatus::find(1);
-        var_dump($NotificationStatus);
         if($NotificationStatus->status) {
             if($NotificationStatus->telegram_retry_after_seconds > 0) {
                 if($NotificationStatus->telegram_retry_after_seconds <= 10) {
@@ -71,7 +70,6 @@ class SendNotification extends Command
                     exit;
                 }
             } else {
-
                 define('USLEEP', 160000); // usleep
 
                 $bot = new TelegramService();
@@ -129,7 +127,7 @@ class SendNotification extends Command
                 } else {
                     $ads_channel_id = env('ADS_TELEGRAM_CHANNEL_ID');
                     if($Notification->status == 'sending') {
-                        if($Notification->send_type == 'copymessage') {
+                        if($Notification->sending_type == 'copymessage') {
                             $keyboard = (empty($Notification->keyboard) or $Notification->keyboard == 'empty') ? null : base64_decode($Notification->keyboard);
                             foreach ($users as $user) {
                                 $send_message = $bot->copyMessage([
@@ -185,7 +183,7 @@ class SendNotification extends Command
                             ]);
                             $Notification->save();
                             $NotificationStatus->save();
-                        } elseif($Notification->send_type == 'forwardmessage') {
+                        } elseif($Notification->sending_type == 'forwardmessage') {
                             $keyboard = (empty($Notification->keyboard) or $Notification->keyboard == 'empty') ? null : base64_decode($Notification->keyboard);
                             foreach ($users as $user) {
                                 $send_message = $bot->forwardMessage([
