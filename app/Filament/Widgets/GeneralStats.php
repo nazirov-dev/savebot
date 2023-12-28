@@ -17,19 +17,19 @@ class GeneralStats extends BaseWidget
     protected function getStats(): array
     {
         $stats = [
-            Stat::make("Jami foydalanuvchilar", BotUser::count() . ' ta')
+            Stat::make("Jami foydalanuvchilar soni", BotUser::count() . ' ta')
                 ->color("success")
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->description("Foydanaluvchilar haftalik o'sish darajasi")
                 ->chart($this->getUsersPerDay()['usersPerDay']),
-            Stat::make("Jami faol foydalanuvchilar", BotUser::where('status', true)->count() . ' ta'),
-            Stat::make("Jami kanallar", Channel::count() . ' ta'),
-            Stat::make("Jami tillar", Lang::count() . ' ta')
+            Stat::make("Jami faol foydalanuvchilar soni", BotUser::where('status', true)->count() . ' ta'),
+            Stat::make("Jami kanallar soni", Channel::count() . ' ta'),
+            Stat::make("Jami tillar soni", Lang::count() . ' ta')
         ];
         $langs = Lang::pluck('name', 'short_code')->toArray();
         $languageCounts = BotUser::select('lang_code', DB::raw('count(*) as total'))->groupBy('lang_code')->get();
         foreach ($languageCounts as $lang) {
-            $stats[] = Stat::make(($langs[$lang['lang_code']] ?? $lang['lang_code']) . "ni tanlagan foydalanuvchilar", $lang['total'] . ' ta');
+            $stats[] = Stat::make(($langs[$lang['lang_code']] ?? $lang['lang_code']) . "ni tanlagan foydalanuvchilar soni", $lang['total'] . ' ta');
         }
         return $stats;
     }
