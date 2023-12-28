@@ -1518,18 +1518,19 @@ class insert_old_users extends Command
         }
 
         // Define the format for printing summary details
-        $format = "| %-255s | %-10s |\n";
+        $format = "| %-25s | %-10s |\n";
+        $border = "+--------------------------+------------+\n";
 
         // Print the table header
-        echo "+-----------------+------------+\n";
+        echo $border;
         printf($format, 'Ma\'lumot', 'Soni');
-        echo "+-----------------+------------+\n";
+        echo $border;
 
         // Print summary details
         printf($format, 'Qo\'shildi', $added);
         printf($format, 'Qo\'shilmadi', $not_added);
         printf($format, 'Faol foydalanuvchilar', $active_users);
         printf($format, 'No faol foydalanuvchilar', $not_active_users);
-        echo "+-----------------+------------+\n";
+        echo $border;
     }
 }
