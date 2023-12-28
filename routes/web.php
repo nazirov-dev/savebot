@@ -1,19 +1,12 @@
 <?php
 
-use App\Jobs\SendMessageToAllUsers;
-use App\Models\Channel;
-use App\Models\NotificationStatus;
-use App\Models\Questionnair;
-use App\Models\Text;
-use App\Models\TgFileId;
 
-use App\Models\Variant;
 use App\Services\TelegramService;
 // use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
-// use Symfony\Component\Process\Process;
 use Illuminate\Http\Request;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -30,20 +23,50 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/stop-sending-notification/{notification_id}', function ($notification_id, Request $request) {
+    $notificationStatus = App\Models\NotificationStatus::find(1);
+    $notification = App\Models\Notification::find($notification_id);
 
-Route::get('/stop-sending-notification/{notification_id}', function ($notification_id) {
-    $NotificationStatus = App\Models\NotificationStatus::find(1);
-    $Notification = App\Models\Notification::find($notification_id);
-    if($NotificationStatus->status and $NotificationStatus->notification_id == $notification_id) {
-        $NotificationStatus->status = false;
-        $NotificationStatus->save();
+    $statuses = [
+        'waiting' => "Navbatda kutilmoqda",
+        'sending' => "Xozirda jo'natilmoqda",
+        'terminated' => "Yakunlanmasdan, to'xtatilgan",
+        'completed' => "Yuborish yakunlangan"
+    ];
+
+    if (!$notification) {
+        return $request->has('json') ?
+            response()->json(['ok' => false, 'message' => 'Notification not found.'], 404) :
+            redirect()->route('filament.admin.pages.dashboard')->withErrors('Notification not found.');
     }
-    if($Notification->status == 'sending') {
-        $Notification->status = 'terminated';
-        $Notification->save();
+
+    $isNotificationSendingNow = $notification->status === 'sending';
+    $isNotificationIdEqualsToNowSendingId = $notificationStatus->status && $notificationStatus->notification_id === $notification_id;
+
+    if ($isNotificationIdEqualsToNowSendingId) {
+        $notificationStatus->update(['status' => false]);
     }
-    return redirect()->route('filament.admin.pages.dashboard');
+
+    if ($isNotificationSendingNow) {
+        $notification->update(['status' => 'terminated']);
+    }
+
+    if (!$request->has('json')) {
+        return redirect()->route('filament.admin.pages.dashboard');
+    }
+
+    $response = [
+        'ok' => true,
+        'color' => $isNotificationSendingNow ? 'success' : 'warning',
+        'method' => $isNotificationSendingNow ? 'success' : 'warning',
+        'message' => $isNotificationSendingNow ?
+            "Xabar yuborish to'xtatildi" :
+            "Xozirda ushbu xabar yuborilmayapti, xolati: " . ($statuses[$notification->status] ?? 'Noma\'lum holat'),
+    ];
+
+    return response()->json($response);
 })->name('stop-sending-notification');
+
 
 Route::post('/sendMedia', function (Request $request) {
     $fileId = $request->input('file_id');
