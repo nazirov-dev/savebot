@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -44,7 +43,7 @@ Route::get('/stop-sending-notification/{notification_id}', function ($notificati
     $isNotificationIdEqualsToNowSendingId = $notificationStatus->status && $notificationStatus->notification_id === $notification_id;
 
     if ($isNotificationIdEqualsToNowSendingId) {
-        $notificationStatus->update(['status' => false]);
+        $notificationStatus->update(['status' => false, 'end_sending_time' => now()]);
     }
 
     if ($isNotificationSendingNow) {
