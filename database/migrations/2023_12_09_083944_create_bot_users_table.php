@@ -18,7 +18,7 @@ class CreateBotUsersTable extends Migration
             $table->bigInteger('user_id');
             $table->string('lang_code')->nullable();
             $table->string('name');
-            $table->string('username');
+            $table->string('username')->nullable()->default(null);
             $table->boolean('status')->default(false);
             $table->timestamps();
         });
