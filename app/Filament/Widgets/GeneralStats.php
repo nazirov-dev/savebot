@@ -29,7 +29,7 @@ class GeneralStats extends BaseWidget
         $langs = Lang::pluck('name', 'short_code')->toArray();
         $languageCounts = BotUser::select('lang_code', DB::raw('count(*) as total'))->groupBy('lang_code')->get();
         foreach ($languageCounts as $lang) {
-            $stats[] = Stat::make($langs[$lang['lang_code']] ?? $lang['lang_code'] . "ni tanlagan foydalanuvchilar", $lang['total'] . ' ta');
+            $stats[] = Stat::make(($langs[$lang['lang_code']] ?? $lang['lang_code']) . "ni tanlagan foydalanuvchilar", $lang['total'] . ' ta');
         }
         return $stats;
     }
