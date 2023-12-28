@@ -12,8 +12,8 @@ use Illuminate\Support\Carbon;
 
 class GeneralStats extends BaseWidget
 {
-    protected static bool $isLazy = false;
-    protected static ?string $pollingInterval = '10s';
+    protected static bool $isLazy = true;
+    protected static ?string $pollingInterval = '30s';
     protected function getStats(): array
     {
         $stats = [
