@@ -11,7 +11,7 @@ use Filament\Notifications\Notification as FilamentNotification;
 
 class NotificationStatusInfo extends BaseWidget
 {
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 1;
     protected int | string | array $columnSpan  = 'full';
     public function table(Table $table): Table
     {
@@ -32,7 +32,7 @@ class NotificationStatusInfo extends BaseWidget
                 Tables\Columns\TextColumn::make("not_sent")
                     ->label("Jo'natilmadi"),
                 Tables\Columns\TextColumn::make("status")
-                    ->label("Xolati")
+                    ->label("Xolat")
                     ->formatStateUsing(function ($record) {
                         return $record->status ? 'Xozirda xabar yuborilmoqda' : 'Xabar yuborilmayapti';
                     }),
