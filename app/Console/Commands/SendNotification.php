@@ -79,7 +79,7 @@ class SendNotification extends Command
                 $select_filter = $Notification->filter_by_language == '*' ? ['status' => true] : ['status' => true, 'lang_code' => $Notification->filter_by_language];
 
                 $users = BotUser::where($select_filter)->offset($NotificationStatus->last_user_index)->limit(config('env.SEND_PER_MINUTE'))->get();
-                Log::info('Filter: ', $select_filter);
+
 
                 if($users->isEmpty()) {
                     $number_of_attempts = $Notification->sent + $Notification->not_sent;
@@ -274,6 +274,8 @@ class SendNotification extends Command
                     'text' => "<b>Xabar yuborish 1 daqiqadan so'ng boshlanadi ✅</b>\n\n<i><b>Ushbu xabarni o'chirmang!!!</b></i>"
                 ]);
                 $new_notification->admin_info_message_id = $send['result']['message_id'];
+                $new_notification->status = 'sending';
+
                 $NotificationStatus->status = true;
                 $NotificationStatus->notification_id = $new_notification->id;
                 $NotificationStatus->sent = 0;
@@ -281,7 +283,6 @@ class SendNotification extends Command
                 $NotificationStatus->last_user_index = 0;
                 $NotificationStatus->telegram_retry_after_seconds = 0;
 
-                $new_notification->status = 'sending';
                 $new_notification->save();
                 $NotificationStatus->save();
             }
