@@ -33,9 +33,9 @@ class NotificationStatusInfo extends BaseWidget
                     ->label("Jo'natilmadi"),
                 Tables\Columns\TextColumn::make("status")
                     ->label("Xolati")
-                    ->description(function ($record) {
+                    ->formatStateUsing(function ($record) {
                         return $record->status ? 'Xozirda xabar yuborilmoqda' : 'Xabar yuborilmayapti';
-                    }, position: 'above'),
+                    }),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('Oxirgi o\'zgarish vaqti')
 
