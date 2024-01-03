@@ -53,14 +53,29 @@ class YouTubeDownloader extends Controller
                 }
             }
             if(!empty($formats)) {
+                function filesize_formatted($size)
+                {
+                    $power = $size > 0 ? floor(log($size, 1024)) : 0;
+                    return number_format($size / pow(1024, $power), 2);
+                }
                 $result = ['ok' => true, 'medias_count' => 1];
                 if(!empty($Media['title'])) {
                     $result['caption'] = $Media['title'];
                 }
                 if(isset($formats['22'])) {
-                    $result['medias'] = [['type' => 'video', 'url' => $formats['22']['url']]];
+                    $size = filesize_formatted($formats['22']['filesize']);
+                    if($size > 49.5) {
+                        $result['ok'] = false;
+                    } else {
+                        $result['medias'] = [['type' => 'video', 'url' => $formats['22']['url']]];
+                    }
                 } elseif(isset($formats['18'])) {
-                    $result['medias'] = [['type' => 'video', 'url' => $formats['18']['url']]];
+                    $size = filesize_formatted($formats['18']['filesize']);
+                    if($size > 49.5) {
+                        $result['ok'] = false;
+                    } else {
+                        $result['medias'] = [['type' => 'video', 'url' => $formats['18']['url']]];
+                    }
                 } else {
                     $result['ok'] = false;
                     $result['error_message'] = 'Yuklab bo\'lmadi';

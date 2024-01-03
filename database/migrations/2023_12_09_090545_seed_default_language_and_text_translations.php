@@ -45,6 +45,7 @@ return new class () extends Migration {
             ['key' => 'unable_to_download_video', 'value' => '<b>Yuklab olish imkoni mavjud emas, iltimos keyinroq urining!</b>'],
             ['key' => 'invalid_url', 'value' => '<b>Siz yuborgan havola notog\'ri iltimos tekshirib qaytadan urinib ko\'ring.</b>'],
             ['key' => 'progress_text', 'value' => '<b>Serverga yuklanmoqda...</b>'],
+            ['key' => 'large_than_50mb', 'value' => '<b>Video hajmi 50mb dan yuqori, yuklab olish imkoni mavjud emas.</b>']
         ];
 
 
@@ -75,6 +76,11 @@ return new class () extends Migration {
             'you_are_still_not_member',
             'check_button_label',
             'cancel_button_label',
+            'select_language',
+            'unable_to_download_video',
+            'invalid_url',
+            'progress_text',
+            'large_than_50mb'
         ])->delete();
 
         // Delete the Uzbek language from the 'langs' table if it was added by 'up' method

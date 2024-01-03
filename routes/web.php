@@ -19,7 +19,7 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', function () {
-    return redirect('https://t.me/ALLSAVEUZ_Bot', 200);
+    return redirect('https://t.me/ALLSAVEUZ_Bot');
 });
 
 Route::get('/stop-sending-notification/{notification_id}', function ($notification_id, Request $request) {

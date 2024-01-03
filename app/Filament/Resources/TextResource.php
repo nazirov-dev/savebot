@@ -83,6 +83,9 @@ class TextResource extends Resource
                     Forms\Components\TextInput::make('progress_text')
                         ->label('Yuklash boshlanganligi haqida matn')
                         ->hint('<b>Serverga yuklanmoqda...</b>'),
+                    Forms\Components\TextInput::make('large_than_50mb')
+                        ->label('Yuklash boshlanganligi haqida matn')
+                        ->hint('<b>Serverga yuklanmoqda...</b>'),
             ]);
     }
 
