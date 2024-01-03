@@ -63,14 +63,14 @@ class YouTubeDownloader extends Controller
                     $result['caption'] = $Media['title'];
                 }
                 if(isset($formats['22'])) {
-                    $size = filesize_formatted($formats['22']['filesize']);
+                    $size = filesize_formatted($formats['22']['filesize'] ?? $formats['22']['filesize_approx']);
                     if($size < 49.5) {
                         $result['large_video'] = true;
                     } else {
                         $result['medias'] = [['type' => 'video', 'url' => $formats['22']['url']]];
                     }
                 } elseif(isset($formats['18'])) {
-                    $size = filesize_formatted($formats['18']['filesize']);
+                    $size = filesize_formatted($formats['18']['filesize'] ?? $formats['18']['filesize_approx']);
                     if($size < 49.5) {
                         $result['large_video'] = true;
                     } else {
