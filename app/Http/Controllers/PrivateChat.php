@@ -89,17 +89,29 @@ class PrivateChat extends Controller
 
     private function downloadMediaFile($media)
     {
-        // Download and store the video in the 'public' disk
-        $contents = file_get_contents($media['url']);
-        $parsedUrl = parse_url($media['url']);
-        $fileName = 'videos/' . basename($parsedUrl['path']);
-        Storage::disk('public')->put($fileName, $contents);
+        try {
+            // Download and store the video in the 'public' disk
+            $contents = file_get_contents($media['url']);
+            if ($contents === false) {
+                return "https://allsave.uz/storage/not_available.mp4";
+            }
 
-        // Construct the relative file path
-        $relativeFilePath = config('app.url') . '/storage/' . $fileName;
+            // Download and store the video in the 'public' disk
+            $contents = file_get_contents($media['url']);
+            $parsedUrl = parse_url($media['url']);
+            $fileName = 'videos/' . basename($parsedUrl['path']);
+            Storage::disk('public')->put($fileName, $contents);
 
-        // Return the relative file path
-        return $relativeFilePath;
+            // Construct the relative file path
+            $relativeFilePath = config('app.url') . '/storage/' . $fileName;
+
+            // Return the relative file path
+            return $relativeFilePath;
+        } catch (\Exception $e) {
+            // Handle the exception (e.g., log the error, return an error message)
+            Log::error("Error downloading media file: ", $media);
+            return "https://allsave.uz/storage/not_available.mp4"; // or return a specific error message
+        }
     }
 
 
@@ -488,7 +500,7 @@ class PrivateChat extends Controller
                             $data = $downloader->getMedia($text);
 
                             if($data['ok']) {
-                                if(isset($data['large_video'])){
+                                if(isset($data['large_video'])) {
                                     $bot->sendMessage([
                                         'chat_id' => $chat_id,
                                         'text' => Text::where(['key' => 'large_than_50mb', 'lang_code' => $user->lang_code])->first()->value
