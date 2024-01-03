@@ -84,8 +84,8 @@ class TextResource extends Resource
                         ->label('Yuklash boshlanganligi haqida matn')
                         ->hint('<b>Serverga yuklanmoqda...</b>'),
                     Forms\Components\TextInput::make('large_than_50mb')
-                        ->label('Yuklash boshlanganligi haqida matn')
-                        ->hint('<b>Serverga yuklanmoqda...</b>'),
+                        ->label('50 Mbdan katta video kelgandagi xatolik matni')
+                        ->hint('<b>Video hajmi 50mb dan yuqori, yuklab olish imkoni mavjud emas.</b>'),
             ]);
     }
 
