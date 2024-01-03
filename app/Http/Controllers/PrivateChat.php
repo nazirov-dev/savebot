@@ -107,15 +107,10 @@ class PrivateChat extends Controller
 
     public function handle($bot)
     {
-        $bot->sendMessage([
-            'chat_id' => config('env.ADMIN_ID'),
-            'text' => json_encode($bot->getData(), 128)
-        ]);
         $text = $bot->Text();
         $chat_id = $bot->ChatID();
         $update_type = $bot->getUpdateType();
 
-        if($chat_id == 1996292437 or $chat_id == 5824236252) {
             if (!is_null($text)) {
                 $user = BotUser::where('user_id', $chat_id)->first();
                 if ((!$user || empty($user->lang_code)) && strpos($text, 'lang_') === false) {
@@ -690,15 +685,7 @@ class PrivateChat extends Controller
                         return response()->json(['ok' => true], 200);
                     }
                 }
-                // if ($text == 'a') {
-                //     BotUser::where(['user_id' => $chat_id])->delete();
-                //     $this->send($bot, "o'chirildi");
-                //     return response()->json(['ok' => true], 200);
-                // } elseif ($text == 't') {
-                //     $this->send($bot, var_export($temp_file, true));
-                //     return response()->json(['ok' => true], 200);
-                // }
             }
-        }
+
     }
 }
