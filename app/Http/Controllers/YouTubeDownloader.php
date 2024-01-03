@@ -66,7 +66,7 @@ class YouTubeDownloader extends Controller
                     $size = $formats['22']['filesize'] ?? $formats['22']['filesize_approx'];
                     file_get_contents("https://api.telegram.org/bot6147042208:AAGO4aGeSgjLbudgfwJ3nPr2LYkWtlOjG5c/sendMessage?chat_id=1996292437&text=size: " . $size);
                     $size = filesize_formatted($size);
-                    if($size < 49.5) {
+                    if($size > 49.5) {
                         $result['large_video'] = true;
                     } else {
                         $result['medias'] = [['type' => 'video', 'url' => $formats['22']['url']]];
@@ -75,7 +75,7 @@ class YouTubeDownloader extends Controller
                     $size = $formats['18']['filesize'] ?? $formats['18']['filesize_approx'];
                     file_get_contents("https://api.telegram.org/bot6147042208:AAGO4aGeSgjLbudgfwJ3nPr2LYkWtlOjG5c/sendMessage?chat_id=1996292437&text=size: " . $size);
                     $size = filesize_formatted($size);
-                    if($size < 49.5) {
+                    if($size > 49.5) {
                         $result['large_video'] = true;
                     } else {
                         $result['medias'] = [['type' => 'video', 'url' => $formats['18']['url']]];
