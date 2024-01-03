@@ -64,14 +64,14 @@ class YouTubeDownloader extends Controller
                 }
                 if(isset($formats['22'])) {
                     $size = filesize_formatted($formats['22']['filesize']);
-                    if($size > 49.5) {
+                    if($size < 49.5) {
                         $result['ok'] = false;
                     } else {
                         $result['medias'] = [['type' => 'video', 'url' => $formats['22']['url']]];
                     }
                 } elseif(isset($formats['18'])) {
                     $size = filesize_formatted($formats['18']['filesize']);
-                    if($size > 49.5) {
+                    if($size < 49.5) {
                         $result['ok'] = false;
                     } else {
                         $result['medias'] = [['type' => 'video', 'url' => $formats['18']['url']]];
