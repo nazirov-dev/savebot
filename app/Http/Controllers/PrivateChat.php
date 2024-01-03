@@ -235,7 +235,7 @@ class PrivateChat extends Controller
 
                             $data = $downloader->getMedia($text, $type);
                             if($data['ok']) {
-                                if(isset($data['caption']) and strlen($data['caption']) <= 1024) {
+                                if(isset($data['caption']) and strlen($data['caption']) <= 950) {
                                     $original_caption = $data['caption'];
                                     $data['caption'] .= $ad_text;
                                 } else {
@@ -311,7 +311,7 @@ class PrivateChat extends Controller
                             $data = $downloader->getMedia($text);
 
                             if($data['ok']) {
-                                if(isset($data['caption']) and strlen($data['caption']) <= 1024) {
+                                if(isset($data['caption']) and strlen($data['caption']) <= 950) {
                                     $original_caption = $data['caption'];
                                     $data['caption'] .= $ad_text;
                                 } else {
@@ -384,7 +384,7 @@ class PrivateChat extends Controller
                             $data = $downloader->getMedia($text);
 
                             if($data['ok']) {
-                                if(isset($data['caption']) and strlen($data['caption']) <= 1024) {
+                                if(isset($data['caption']) and strlen($data['caption']) <= 950) {
                                     $original_caption = $data['caption'];
                                     $data['caption'] .= $ad_text;
                                 } else {
@@ -488,7 +488,14 @@ class PrivateChat extends Controller
                             $data = $downloader->getMedia($text);
 
                             if($data['ok']) {
-                                if(isset($data['caption']) and strlen($data['caption']) <= 1024) {
+                                if(isset($data['large_video'])){
+                                    $bot->sendMessage([
+                                        'chat_id' => $chat_id,
+                                        'text' => Text::where(['key' => 'large_than_50mb', 'lang_code' => $user->lang_code])->first()->value
+                                    ]);
+                                    exit;
+                                }
+                                if(isset($data['caption']) and strlen($data['caption']) <= 950) {
                                     $original_caption = $data['caption'];
                                     $data['caption'] .= $ad_text;
                                 } else {
@@ -561,7 +568,7 @@ class PrivateChat extends Controller
                             $data = $downloader->getMedia($text);
 
                             if($data['ok']) {
-                                if(isset($data['caption']) and strlen($data['caption']) <= 1024) {
+                                if(isset($data['caption']) and strlen($data['caption']) <= 950) {
                                     $original_caption = $data['caption'];
                                     $data['caption'] .= $ad_text;
                                 } else {
@@ -635,7 +642,7 @@ class PrivateChat extends Controller
                             $data = $downloader->getMedia($text);
 
                             if($data['ok']) {
-                                if(isset($data['caption']) and strlen($data['caption']) <= 1024) {
+                                if(isset($data['caption']) and strlen($data['caption']) <= 950) {
                                     $original_caption = $data['caption'];
                                     $data['caption'] .= $ad_text;
                                 } else {
