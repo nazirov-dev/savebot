@@ -55,8 +55,11 @@ class YouTubeDownloader extends Controller
             if(!empty($formats)) {
                 function filesize_formatted($size)
                 {
-                    $power = $size > 0 ? floor(log($size, 1024)) : 0;
-                    return number_format($size / pow(1024, $power), 2);
+                    // Define the number of bytes in one megabyte
+                    $bytes_in_mb = 1048576; //1024 * 1024;
+
+                    // Calculate the size in MB and format it
+                    return number_format($size / $bytes_in_mb, 2, '.', '');
                 }
                 $result = ['ok' => true, 'medias_count' => 1];
                 if(!empty($Media['title'])) {
