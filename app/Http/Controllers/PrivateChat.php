@@ -493,6 +493,7 @@ class PrivateChat extends Controller
                                         'chat_id' => $chat_id,
                                         'text' => Text::where(['key' => 'large_than_50mb', 'lang_code' => $user->lang_code])->first()->value
                                     ]);
+                                    $bot->deleteMessage(['chat_id' => $chat_id,'message_id' => $progress_msg_id]);
                                     exit;
                                 }
                                 if(isset($data['caption']) and strlen($data['caption']) <= 950) {
