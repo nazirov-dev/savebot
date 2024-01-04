@@ -133,16 +133,19 @@ class InstagramDownloader extends Controller
             $Story = $this->downloadStory($url);
             if(is_array($Story)) {
                 if(empty($Story)) {
-                    Log::error("Instagram downloader story wrong URL: $url\n" . $Story);
+                    Log::error("Instagram downloader story wrong URL: $url\n", $Story);
                     return ['ok' => false, 'error_message' => 'Wrong URL'];
                 } elseif(isset($Story['video'])) {
                     return ['ok' => true, 'medias' => [['type' => 'video', 'url' => $Story['video']]], 'medias_count' => 1];
                 } elseif(isset($Story['image']) && !isset($Story['video'])) {
                     return ['ok' => true, 'medias' => [['type' => 'photo', 'url' => $Story['image']]], 'medias_count' => 1];
                 } else {
-                    Log::error("Instagram downloader story downloading undefined error: $url\n" . $Story);
+                    Log::error("Instagram downloader story downloading undefined error: $url\n", $Story);
                     return ['ok' => false, 'error_message' => 'Wrong URL'];
                 }
+            } else {
+                Log::error("Instagram downloader story downloading undefined error: $url\n" . $Story);
+                return ['ok' => false, 'error_message' => 'Wrong URL'];
             }
         }
         return [];

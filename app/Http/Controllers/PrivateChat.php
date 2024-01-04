@@ -90,17 +90,30 @@ class PrivateChat extends Controller
     private function downloadMediaFile($media)
     {
         try {
-            // Download and store the video in the 'public' disk
-            $contents = file_get_contents($media['url']);
-            if ($contents === false) {
+            $parsedUrl = parse_url($media['url']);
+            $fileName = 'videos/' . basename($parsedUrl['path']);
+            $filePath = Storage::disk('public')->path($fileName);
+
+            // Open the file for writing
+            $fp = fopen($filePath, 'w+');
+
+            // Use stream context to download the file in chunks
+            $context = stream_context_create();
+            $stream = fopen($media['url'], 'r', false, $context);
+
+            if (!$stream) {
+                fclose($fp);
                 return "https://allsave.uz/storage/not_available.mp4";
             }
 
-            // Download and store the video in the 'public' disk
-            $contents = file_get_contents($media['url']);
-            $parsedUrl = parse_url($media['url']);
-            $fileName = 'videos/' . basename($parsedUrl['path']);
-            Storage::disk('public')->put($fileName, $contents);
+            // Read and write in chunks
+            while (!feof($stream)) {
+                fwrite($fp, fread($stream, 2048));
+            }
+
+            // Close the streams
+            fclose($stream);
+            fclose($fp);
 
             // Construct the relative file path
             $relativeFilePath = config('app.url') . '/storage/' . $fileName;
@@ -108,12 +121,11 @@ class PrivateChat extends Controller
             // Return the relative file path
             return $relativeFilePath;
         } catch (\Exception $e) {
-            // Handle the exception (e.g., log the error, return an error message)
+            // Handle the exception
             Log::error("Error downloading media file: ", $media);
-            return "https://allsave.uz/storage/not_available.mp4"; // or return a specific error message
+            return "https://allsave.uz/storage/not_available.mp4";
         }
     }
-
 
     public function handle($bot)
     {
@@ -449,7 +461,7 @@ class PrivateChat extends Controller
                             $parsedUrl = parse_url($url);
 
                             // Rebuild the base URL
-                            $baseUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . $parsedUrl['path'];
+                            $baseUrl = ($parsedUrl['scheme'] ?? 'http') . '://' . $parsedUrl['host'] . $parsedUrl['path'];
 
                             // Check if there is a query string
                             if (!empty($parsedUrl['query'])) {
