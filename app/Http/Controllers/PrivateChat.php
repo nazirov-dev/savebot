@@ -89,6 +89,7 @@ class PrivateChat extends Controller
 
     private function downloadMediaFile($media)
     {
+        ini_set('memory_limit', '256M');
         try {
             $parsedUrl = parse_url($media['url']);
             $fileName = 'videos/' . basename($parsedUrl['path']);
